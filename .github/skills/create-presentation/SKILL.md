@@ -31,8 +31,21 @@ presentation in this repository.
    unpinned scripts, fonts, or UI libraries from a CDN.
 7. Add meaningful alt text to informative images and empty alt text to purely
    decorative images.
-8. Run `npm run check`.
-9. Perform a visual pass at 1600x900. The preferred agent workflow is the
+8. Write the full spoken script in the deck's `script.json`. Use one `ask`
+   segment as the silent slide cue, followed by one or more `say` segments.
+   English practice scripts may include Chinese in `secondary`; secondary text
+   is shown but never read.
+9. Invoke the installed `karaoke-prompter` skill, then build the paired
+   self-contained rehearsal page:
+
+   ```bash
+   npm run karaoke -- <slug>
+   ```
+
+   Never hand-edit `karaoke.html`; change `script.json` and regenerate it.
+10. Run `npm run check`.
+11. Perform a visual pass of both `index.html` and `karaoke.html` at 1600x900.
+    The preferred agent workflow is the
    official Microsoft Playwright CLI skill vendored in
    `.claude/skills/playwright-cli/`:
 
@@ -43,7 +56,7 @@ presentation in this repository.
    playwright-cli screenshot --hires
    ```
 
-10. Fix overflow, weak hierarchy, low contrast, and console errors before
+12. Fix overflow, weak hierarchy, low contrast, pacing problems, and console errors before
     considering the deck complete.
 
 ## Boundaries
@@ -52,4 +65,6 @@ presentation in this repository.
 - Do not use Microsoft logos unless the presentation has explicit permission
   and a legitimate reason to do so.
 - Describe the visual system as Fluent-inspired, not Microsoft-official.
+- Every presentation must ship with its rehearsal script and generated karaoke
+  page.
 - Do not bypass the shared runtime or quality checks.

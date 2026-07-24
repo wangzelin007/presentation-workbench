@@ -4,9 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build-catalog.mjs && vite build",
+    "build": "node scripts/validate-karaoke.mjs && node scripts/build-catalog.mjs && vite build",
     "check": "npm run typecheck && npm run build && npm test",
     "dev": "node scripts/build-catalog.mjs && vite",
+    "karaoke": "node scripts/build-karaoke.mjs",
     "new": "node scripts/create-deck.mjs",
     "preview": "vite preview",
     "test": "playwright test",

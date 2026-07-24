@@ -1,0 +1,226 @@
+.wide {
+  width: min(1300px, 100%);
+  max-width: none;
+}
+
+.takeaway,
+.closing-line {
+  color: var(--colorNeutralForeground1, #fff) !important;
+  font-weight: 600;
+}
+
+.command-tree {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 56px 0 36px;
+}
+
+.command-tree span,
+.command-tree strong {
+  padding: 16px 18px;
+  border: 1px solid var(--colorNeutralStroke2, #525252);
+  border-radius: 8px;
+  color: var(--colorNeutralForeground2, #d6d6d6);
+  font: 600 clamp(15px, 1.2vw, 21px) "Cascadia Code", Consolas, monospace;
+  background: var(--colorNeutralBackground3, #3d3d3d);
+}
+
+.command-tree span::after {
+  margin-left: 20px;
+  color: var(--colorBrandForeground1, #479ef5);
+  content: "›";
+}
+
+.command-tree strong {
+  border-color: var(--colorBrandBackground, #479ef5);
+  color: #fff;
+  background: var(--colorBrandBackground, #0f6cbd);
+}
+
+.comparison,
+.doors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.comparison article,
+.doors article {
+  min-height: 260px;
+  padding: 36px;
+  border: 1px solid var(--colorNeutralStroke2, #525252);
+  border-radius: 20px;
+  background: var(--colorNeutralBackground3, #3d3d3d);
+}
+
+.comparison__accent {
+  border-color: var(--colorBrandBackground, #479ef5) !important;
+  background: linear-gradient(145deg, #0f6cbd, #115ea3) !important;
+}
+
+.comparison__number,
+.tool-grid span {
+  color: var(--colorBrandForeground1, #479ef5);
+  font: 700 16px "Cascadia Code", Consolas, monospace;
+}
+
+.comparison__accent .comparison__number,
+.comparison__accent p {
+  color: #fff;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+  margin: 56px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 28px;
+  align-items: start;
+  padding: 36px;
+  border-top: 4px solid var(--colorBrandBackground, #479ef5);
+  background: var(--colorNeutralBackground3, #3d3d3d);
+}
+
+.steps li > span {
+  color: var(--colorBrandForeground1, #479ef5);
+  font-size: 64px;
+  font-weight: 600;
+  line-height: 0.9;
+}
+
+.steps strong {
+  color: var(--colorNeutralForeground1, #fff);
+  font-size: 32px;
+}
+
+.steps p {
+  margin-bottom: 0;
+  font-size: 22px;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 48px;
+}
+
+.tool-grid article {
+  min-height: 250px;
+  padding: 28px;
+  border-radius: 14px;
+  background: var(--colorNeutralBackground3, #3d3d3d);
+}
+
+.tool-grid h3 {
+  margin-top: 28px;
+  font-size: 28px;
+}
+
+.tool-grid p {
+  font-size: 19px;
+}
+
+.flow {
+  display: grid;
+  grid-template-columns: 0.7fr 140px 1fr;
+  align-items: center;
+  margin: 48px 0 24px;
+}
+
+.flow__source {
+  padding: 64px 32px;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+  background: var(--colorBrandBackground, #0f6cbd);
+}
+
+.flow__line {
+  height: 3px;
+  background: var(--colorBrandBackground, #479ef5);
+}
+
+.flow__targets {
+  display: grid;
+  gap: 18px;
+}
+
+.flow__targets article {
+  display: flex;
+  justify-content: space-between;
+  padding: 24px 28px;
+  border-left: 4px solid var(--colorBrandBackground, #479ef5);
+  background: var(--colorNeutralBackground3, #3d3d3d);
+}
+
+.flow__targets span,
+.doors span {
+  color: var(--colorNeutralForeground3, #adadad);
+  font-size: 18px;
+}
+
+.flow__targets strong,
+.doors strong {
+  color: var(--colorNeutralForeground1, #fff);
+  font-size: 24px;
+}
+
+.terminal {
+  margin-top: 48px;
+  padding: 30px 36px;
+  border: 1px solid var(--colorNeutralStroke2, #525252);
+  border-radius: 12px;
+  color: var(--colorNeutralForeground1, #fff);
+  font: 22px/1.7 "Cascadia Code", Consolas, monospace;
+  text-align: left;
+  background: #151515;
+  box-shadow: var(--shadow64, 0 32px 64px rgb(0 0 0 / 28%));
+}
+
+.terminal span {
+  color: #54b054;
+}
+
+.terminal small {
+  display: block;
+  color: var(--colorBrandForeground1, #479ef5);
+}
+
+.doors {
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.doors article {
+  display: grid;
+  align-content: center;
+  gap: 18px;
+}
+
+.doors__plus {
+  color: var(--colorBrandForeground1, #479ef5);
+  font-size: 56px;
+  font-weight: 300;
+}
+
+@media (max-width: 1100px) {
+  .command-tree {
+    flex-wrap: wrap;
+  }
+
+  .tool-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

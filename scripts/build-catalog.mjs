@@ -1,4 +1,4 @@
-import { readFile, readdir, writeFile } from 'node:fs/promises';
+import { access, readFile, readdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const presentationsRoot = new URL('../presentations/', import.meta.url);
@@ -29,6 +29,12 @@ for (const directory of directories) {
     title,
     description,
     path: `./presentations/${directory.name}/`,
+    rehearsalPath: await access(
+      new URL(`${directory.name}/karaoke.html`, presentationsRoot),
+    ).then(
+      () => `./presentations/${directory.name}/karaoke.html`,
+      () => undefined,
+    ),
   });
 }
 

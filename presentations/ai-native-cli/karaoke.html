@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI-Native CLI rehearsal</title>
+<style>
+  :root{
+    --bg:#0d1117; --fg:#e6edf3; --past:#3f464d; --future:#e6edf3;
+    --hot:#ffd633; --hot-dim:#9a8a2e; --muted:#6e7681; --accent:#58a6ff; --ask:#d2a8ff;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;width:100%;height:100%;background:var(--bg);color:var(--fg);
+    font-family:'Cascadia Code','Segoe UI','Microsoft YaHei','PingFang SC',system-ui,sans-serif;overflow:hidden;}
+
+  .topbar{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;
+    padding:10px 20px;background:rgba(13,17,23,.92);border-bottom:1px solid #21262d;z-index:20;
+    font-size:13px;color:var(--muted);gap:12px;flex-wrap:wrap;}
+  .topbar .left{display:flex;gap:14px;align-items:center;}
+  .topbar .right{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .brand{color:var(--hot);font-weight:600;}
+  .key{background:#161b22;border:1px solid #30363d;padding:2px 7px;border-radius:4px;font-size:11px;}
+  button{background:transparent;color:var(--muted);border:1px solid #30363d;padding:4px 10px;border-radius:4px;
+    cursor:pointer;font-family:inherit;font-size:12px;}
+  button:hover{color:var(--fg);border-color:var(--hot);}
+  button.on{color:var(--hot);border-color:var(--hot);}
+  select{background:#161b22;color:var(--fg);border:1px solid #30363d;padding:4px 6px;border-radius:4px;
+    font-family:inherit;font-size:12px;max-width:200px;}
+  .loop-ind{color:var(--hot);font-size:11px;}
+
+  .scroller{position:fixed;top:46px;bottom:0;left:0;right:0;overflow-y:hidden;padding:45vh 8% 45vh 8%;}
+  body.live .scroller{overflow-y:auto;}
+
+  .seg{margin:30px 0;transition:opacity .4s ease;}
+  .seg.past{opacity:.35;}
+  .tag{display:inline-block;font-size:12px;font-weight:700;color:var(--ask);letter-spacing:.5px;
+    border:1px solid #553a7a;border-radius:10px;padding:1px 9px;margin-bottom:8px;}
+
+  /* QUESTION segments: smaller + grey */
+  .seg.ask .prim{font-size:18px;line-height:1.45;color:var(--muted);font-weight:400;}
+  .seg.ask.current .prim{color:#9aa3ad;}
+  .seg.ask .prim .word.active{color:var(--ask);}
+  .seg.ask .prim .word.spoken{color:#7a6a9a;}
+
+  /* SPOKEN segments: big, highlighted */
+  .seg.say .prim{font-size:34px;line-height:1.55;font-weight:500;color:#7d8590;letter-spacing:-.2px;transition:color .4s ease;}
+  .seg.say.past .prim{color:var(--past);}
+  .seg.say.current .prim{color:var(--fg);}
+  .word{transition:color .2s ease;}
+  .seg.say.current .word.spoken{color:var(--hot-dim);}
+  .seg.say.current .word.active{color:var(--hot);text-shadow:0 0 18px rgba(255,214,51,.30);}
+  .seg.say.current .word.future{color:var(--fg);}
+
+  /* secondary / translation line: dim, never highlighted */
+  .sec{display:block;margin-top:8px;font-size:17px;font-weight:400;line-height:1.5;color:#586069;transition:color .4s ease;}
+  .seg.current .sec{color:#8b949e;}
+  .seg.past .sec{color:#3f464d;}
+
+  #overlay{position:fixed;inset:0;z-index:40;background:rgba(13,17,23,.97);display:flex;
+    flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;cursor:pointer;padding:24px;}
+  #overlay h1{margin:0;font-size:30px;color:var(--fg);font-weight:600;}
+  #overlay p{margin:0;color:var(--muted);font-size:15px;line-height:1.7;max-width:620px;}
+  #overlay .play{font-size:56px;color:var(--hot);}
+  #overlay .small{font-size:12px;color:#586069;}
+  .hide{display:none !important;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="left">
+    <span class="brand" id="brand">Karaoke</span>
+    <span class="loop-ind" id="loop-ind">⟳ loop</span>
+    <span id="status"></span>
+  </div>
+  <div class="right">
+    <label style="font-size:11px;">rate
+      <select id="rate-select" title="speech rate">
+        <option value="0.8">0.8×</option><option value="0.9">0.9×</option>
+        <option value="1.0">1.0×</option><option value="1.05">1.05×</option><option value="1.1">1.1×</option>
+      </select>
+    </label>
+    <select id="voice-select" title="TTS voice"></select>
+    <button id="btn-mute" title="静音（录屏用，不发人声）">🔊 Voice (S)</button>
+    <button id="btn-live" title="手动翻页">Live (M)</button>
+    <button id="btn-restart">↻ Restart (R)</button>
+    <span class="key">Space</span><span class="key">S</span><span class="key">M</span><span class="key">R</span><span class="key">F</span>
+  </div>
+</div>
+
+<div id="scroller" class="scroller"></div>
+
+<div id="overlay">
+  <div class="play">▶</div>
+  <h1>Tap to start · 点击开始</h1>
+  <p id="ov-desc"></p>
+  <p class="small">Space = pause · S = mute (screen-record) · M = live manual · R = restart · F = fullscreen · click a line to jump</p>
+</div>
+
+<script id="segments" type="application/json">[{"kind": "ask", "primary": "Give AI its own manual.", "secondary": "给 AI 一份它自己的说明书。", "tag": "SLIDE 1"}, {"kind": "say", "primary": "Hi everyone. I want to share one simple idea today.", "secondary": "大家好。今天我想分享一个很简单的想法。"}, {"kind": "say", "primary": "The products we build now serve two users: the person at the keyboard, and the AI acting on that person's behalf.", "secondary": "我们今天做的产品其实服务两类用户：键盘前的人，以及代表这个人行动的 AI。"}, {"kind": "say", "primary": "We already write a manual for the first user. I think we should write one for the second.", "secondary": "我们已经为第一类用户写了说明书。现在也应该为第二类用户写一份。"}, {"kind": "ask", "primary": "Human help makes AI walk the whole tree.", "secondary": "给人看的帮助，让 AI 走完整棵树。", "tag": "SLIDE 2"}, {"kind": "say", "primary": "Traditional command help is a navigation tree. That feels natural to a person, but it is expensive for a model.", "secondary": "传统命令帮助是一棵导航树。它对人很自然，对模型却很昂贵。"}, {"kind": "say", "primary": "A deeply nested command can take six lookups to discover. A small typo can stop the search completely.", "secondary": "一个深层命令可能需要查六次。一个小拼写错误就会让搜索彻底停止。"}, {"kind": "ask", "primary": "People optimize for accuracy. AI optimizes for relevance.", "secondary": "人追求精确，AI 追求相关。", "tag": "SLIDE 3"}, {"kind": "say", "primary": "A person usually knows where they want to go. They want the exact page.", "secondary": "人通常知道自己要去哪，所以想要精确的那一页。"}, {"kind": "say", "primary": "An AI is planning its next step. It needs the nearby context too, so it can compare options and recover from a wrong guess.", "secondary": "AI 正在规划下一步。它也需要附近的上下文，才能比较选项，并从错误猜测中恢复。"}, {"kind": "ask", "primary": "Collapse the tree into two machine-friendly moves.", "secondary": "把整棵树压缩成两个机器友好的动作。", "tag": "SLIDE 4"}, {"kind": "say", "primary": "The first move is list: give the model a compact catalogue of every capability.", "secondary": "第一个动作是列出：给模型一份所有能力的紧凑目录。"}, {"kind": "say", "primary": "The second move is inspect: return complete details for fuzzy, related matches.", "secondary": "第二个动作是查看：针对模糊但相关的匹配返回完整细节。"}, {"kind": "say", "primary": "That gives the model enough context with far fewer round trips.", "secondary": "这样模型能用更少的往返拿到足够的上下文。"}, {"kind": "ask", "primary": "Expose what the product already knows.", "secondary": "把产品已经知道的东西暴露出来。", "tag": "SLIDE 5"}, {"kind": "say", "primary": "The AI manual does not need to be a new documentation project.", "secondary": "AI 说明书不需要成为一个新的文档项目。"}, {"kind": "say", "primary": "Most products already know the environment, existing resources, supported capabilities, and live availability constraints.", "secondary": "大多数产品已经知道环境、现有资源、支持的能力，以及实时可用性限制。"}, {"kind": "say", "primary": "The opportunity is to expose that knowledge through stable, structured tools.", "secondary": "机会在于通过稳定、结构化的工具把这些知识暴露出来。"}, {"kind": "ask", "primary": "Build the tools once. Serve every AI path.", "secondary": "工具只做一次，服务所有 AI 路径。", "tag": "SLIDE 6"}, {"kind": "say", "primary": "A built-in agent can call the tools directly. An external agent can reach the same tools through a CLI and a skill.", "secondary": "内置 agent 可以直接调用工具，外部 agent 可以通过 CLI 和 skill 使用同一套工具。"}, {"kind": "say", "primary": "Both paths use the same logic and the same output contract. That keeps maintenance low.", "secondary": "两条路径使用相同逻辑和相同输出契约，因此维护成本很低。"}, {"kind": "ask", "primary": "Switch to the terminal.", "secondary": "切换到终端。", "tag": "SLIDE 7 · LIVE DEMO"}, {"kind": "say", "primary": "I have given the coding agent a small skill that points it to these product tools.", "secondary": "我给 coding agent 安装了一个小 skill，把它指向这些产品工具。"}, {"kind": "say", "primary": "Watch the sequence. It checks what exists, reads the real command contract, and then builds the command from current facts instead of training data.", "secondary": "请看这个顺序：它先检查现状，读取真实命令契约，再依据当前事实而不是训练数据生成命令。"}, {"kind": "ask", "primary": "Every product needs two front doors.", "secondary": "每个产品都需要两扇前门。", "tag": "SLIDE 8"}, {"kind": "say", "primary": "Keep the interface for people: the graphical experience, documentation, and human-readable help.", "secondary": "保留给人的界面：图形体验、文档和人类可读的帮助。"}, {"kind": "say", "primary": "Add an interface for AI: structured tools, stable schemas, and errors a model can act on.", "secondary": "再增加给 AI 的界面：结构化工具、稳定 schema，以及模型可以采取行动的错误。"}, {"kind": "ask", "primary": "Ship the AI manual with the product.", "secondary": "让 AI 说明书随产品一起交付。", "tag": "SLIDE 9"}, {"kind": "say", "primary": "This is not a proposal to build another agent.", "secondary": "这不是要再造一个 agent。"}, {"kind": "say", "primary": "It is a proposal to give every agent a reliable way to understand and operate the product.", "secondary": "这是要给每个 agent 一种可靠理解并操作产品的方式。"}, {"kind": "say", "primary": "My ask is simple: when we ship a product interface for people, ship its AI manual too.", "secondary": "我的请求很简单：当我们交付给人的产品界面时，也一起交付它的 AI 说明书。"}]</script>
+<script id="options" type="application/json">{"title": "AI-Native CLI rehearsal", "highlightColor": "#479ef5", "readQuestions": false, "showSecondary": true, "loopPauseMs": 2600, "askHoldMs": 1500, "rate": 0.95, "primaryLang": "en"}</script>
+
+<script>
+const OPTIONS = Object.assign({
+  title:'Karaoke', highlightColor:'#ffd633', readQuestions:true, showSecondary:true,
+  loopPauseMs:2600, askHoldMs:1100, rate:1.0, primaryLang:'en'
+}, JSON.parse(document.getElementById('options').textContent || '{}'));
+
+let TTS_RATE = OPTIONS.rate || 1.0;
+document.documentElement.style.setProperty('--hot', OPTIONS.highlightColor || '#ffd633');
+document.title = OPTIONS.title; document.getElementById('brand').textContent = OPTIONS.title;
+document.getElementById('rate-select').value = String(TTS_RATE);
+document.getElementById('ov-desc').innerHTML =
+  'Reads + highlights the spoken lines' + (OPTIONS.readQuestions ? ' and questions' : '; questions are shown but not read') +
+  (OPTIONS.showSecondary ? '. A secondary line scrolls along' : '') + '. It loops automatically.<br>自动朗读高亮、自动滚动、自动循环。';
+
+const $scroller=document.getElementById('scroller');
+const $status=document.getElementById('status');
+const $rateSelect=document.getElementById('rate-select');
+const $voiceSelect=document.getElementById('voice-select');
+const $btnMute=document.getElementById('btn-mute');
+const $btnLive=document.getElementById('btn-live');
+const $btnRestart=document.getElementById('btn-restart');
+const $overlay=document.getElementById('overlay');
+
+// Language-aware tokenizer: each CJK char is its own unit; Latin/other runs split on whitespace.
+const CJK=/[\u3400-\u9fff\u3040-\u30ff\uac00-\ud7af\uff66-\uff9f]/;
+function tokenize(text){
+  const tokens=[]; let i=0; const n=text.length;
+  while(i<n){
+    const ch=text[i];
+    if(/\s/.test(ch)){ i++; continue; }
+    if(CJK.test(ch)){ tokens.push({word:ch,start:i,end:i+1}); i++; }
+    else { let j=i; while(j<n && !/\s/.test(text[j]) && !CJK.test(text[j])) j++; tokens.push({word:text.slice(i,j),start:i,end:j}); i=j; }
+  }
+  return tokens;
+}
+function isCJKHeavy(text){ let c=0; for(const ch of text) if(CJK.test(ch)) c++; return c > text.length*0.3; }
+
+const SEG = JSON.parse(document.getElementById('segments').textContent);
+SEG.forEach(s=>{ s.kind=s.kind||'say'; s.primary=s.primary||''; s.tokens=tokenize(s.primary); s._cjk=isCJKHeavy(s.primary); });
+function isRead(seg){ return seg.kind==='say' || (seg.kind==='ask' && OPTIONS.readQuestions); }
+
+const segEls = SEG.map((seg,i)=>{
+  const div=document.createElement('div'); div.className='seg '+seg.kind; div.dataset.index=i;
+  if(seg.tag){ const t=document.createElement('span'); t.className='tag'; t.textContent=seg.tag; div.appendChild(t); }
+  const prim=document.createElement('div'); prim.className='prim';
+  seg.tokens.forEach((tk,j)=>{
+    const w=document.createElement('span'); w.className='word future'; w.dataset.idx=j; w.textContent=tk.word;
+    prim.appendChild(w);
+    // add a space only between non-CJK tokens
+    const next=seg.tokens[j+1];
+    if(next && !CJK.test(tk.word[tk.word.length-1]) && !CJK.test(next.word[0])) prim.appendChild(document.createTextNode(' '));
+  });
+  div.appendChild(prim);
+  if(OPTIONS.showSecondary && seg.secondary){ const sec=document.createElement('div'); sec.className='sec'; sec.textContent=seg.secondary; div.appendChild(sec); }
+  div.addEventListener('click',()=>{ if(started) jumpTo(i); });
+  $scroller.appendChild(div);
+  return div;
+});
+
+let mode='auto';   // 'auto' | 'live'
+let muted=false;
+let currentIdx=-1, currentUtterance=null, voices=[], preferredVoice=null;
+let advanceTimer=null, fallbackTimer=null, resumeGuard=null, started=false, paused=false;
+
+function clearTimers(){ if(advanceTimer){clearTimeout(advanceTimer);advanceTimer=null;} if(fallbackTimer){clearInterval(fallbackTimer);fallbackTimer=null;} }
+function cancelSpeech(){ if('speechSynthesis'in window) window.speechSynthesis.cancel(); currentUtterance=null; stopResumeGuard(); }
+function startResumeGuard(){ stopResumeGuard(); resumeGuard=setInterval(()=>{ const s=window.speechSynthesis; if(s&&s.speaking&&!s.paused) s.resume(); },7000); }
+function stopResumeGuard(){ if(resumeGuard){clearInterval(resumeGuard);resumeGuard=null;} }
+
+function setSegState(idx){
+  segEls.forEach((el,i)=>{
+    el.classList.toggle('current',i===idx);
+    el.classList.toggle('past',i<idx);
+    if(i!==idx) el.querySelectorAll('.word').forEach(w=>{w.classList.remove('active','spoken');w.classList.add('future');});
+  });
+}
+function setActiveWord(idx,wIdx){
+  const el=segEls[idx]; if(!el) return;
+  el.querySelectorAll('.word').forEach((w,j)=>{
+    w.classList.remove('active','spoken','future');
+    if(j<wIdx) w.classList.add('spoken'); else if(j===wIdx) w.classList.add('active'); else w.classList.add('future');
+  });
+}
+function markAllSpoken(idx){ segEls[idx].querySelectorAll('.word').forEach(w=>{w.classList.remove('active','future');w.classList.add('spoken');}); }
+
+let scrollAnim=null;
+function smoothScrollTo(target,duration){
+  if(scrollAnim) cancelAnimationFrame(scrollAnim);
+  const start=$scroller.scrollTop, dist=target-start; if(Math.abs(dist)<1) return;
+  const t0=performance.now();
+  (function step(now){ const k=Math.min(1,(now-t0)/duration); const e=k<0.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+    $scroller.scrollTop=start+dist*e; if(k<1) scrollAnim=requestAnimationFrame(step); else scrollAnim=null; })(performance.now());
+}
+function scrollIntoView(idx){ const el=segEls[idx]; if(!el) return; smoothScrollTo(el.offsetTop-$scroller.clientHeight/2+el.offsetHeight/2,600); }
+
+function updateStatus(){ const tot=SEG.filter(isRead).length; const done=SEG.slice(0,currentIdx+1).filter(isRead).length; $status.textContent=`${done}/${tot}`; }
+
+function setCurrent(idx){
+  if(idx<0||idx>=SEG.length) return;
+  currentIdx=idx; paused=false;
+  setSegState(idx); scrollIntoView(idx); updateStatus();
+  if(mode==='live') return;
+  const seg=SEG[idx];
+  if(isRead(seg)) speakOrTime(idx);
+  else { clearTimers(); cancelSpeech(); advanceTimer=setTimeout(()=>advance(idx), OPTIONS.askHoldMs); }
+}
+function advance(idx){ if(idx<SEG.length-1) setCurrent(idx+1); else scheduleLoop(); }
+
+function perUnitMs(seg){ const base = seg._cjk ? 230 : 340; return Math.max(120, base/TTS_RATE); }
+
+function speakOrTime(idx){
+  clearTimers();
+  const seg=SEG[idx]; const n=seg.tokens.length;
+  if(n===0){ advanceTimer=setTimeout(()=>advance(idx),300); return; }
+  // muted or no TTS: pure timer-driven highlight, no audio
+  if(muted || !('speechSynthesis'in window)){
+    let wi=0; setActiveWord(idx,0);
+    fallbackTimer=setInterval(()=>{ wi++; if(wi<n) setActiveWord(idx,wi);
+      else { clearInterval(fallbackTimer); fallbackTimer=null; markAllSpoken(idx); advanceTimer=setTimeout(()=>advance(idx),500); } }, perUnitMs(seg));
+    return;
+  }
+  cancelSpeech();
+  const u=new SpeechSynthesisUtterance(seg.primary);
+  u.rate=TTS_RATE; u.pitch=1.0; if(preferredVoice) u.voice=preferredVoice; if(seg.lang) u.lang=seg.lang;
+  let boundaryFired=false, ti=0; setActiveWord(idx,0);
+  // fallback timer drives highlight until/unless boundary events arrive (needed for CJK voices)
+  fallbackTimer=setInterval(()=>{ if(boundaryFired){clearInterval(fallbackTimer);fallbackTimer=null;return;}
+    ti++; if(ti<n) setActiveWord(idx,ti); else { clearInterval(fallbackTimer); fallbackTimer=null; } }, perUnitMs(seg));
+  u.onboundary=(e)=>{ if(e.name && e.name!=='word') return; boundaryFired=true;
+    if(fallbackTimer){clearInterval(fallbackTimer);fallbackTimer=null;}
+    let wi=0; for(let j=0;j<n;j++){ if(seg.tokens[j].start<=e.charIndex) wi=j; else break; } setActiveWord(idx,wi); };
+  u.onend=()=>{ if(currentUtterance!==u) return; stopResumeGuard(); if(fallbackTimer){clearInterval(fallbackTimer);fallbackTimer=null;}
+    markAllSpoken(idx); advance(idx); };
+  currentUtterance=u; window.speechSynthesis.speak(u); startResumeGuard();
+}
+
+function scheduleLoop(){ $status.textContent=`restarting in ${OPTIONS.loopPauseMs/1000}s …`; clearTimers();
+  advanceTimer=setTimeout(()=>{ advanceTimer=null; restart(); }, OPTIONS.loopPauseMs); }
+function restart(){ cancelSpeech(); clearTimers();
+  segEls.forEach((el)=>{ el.classList.remove('current','past'); el.querySelectorAll('.word').forEach(w=>{w.classList.remove('active','spoken');w.classList.add('future');}); });
+  currentIdx=-1; $scroller.scrollTop=0; if(mode!=='live') setCurrent(0); }
+function jumpTo(idx){ cancelSpeech(); clearTimers(); setCurrent(idx); }
+
+function setMuted(on){ muted=on; $btnMute.textContent= on?'🔇 Muted (S)':'🔊 Voice (S)'; $btnMute.classList.toggle('on',on);
+  if(started && mode!=='live' && currentIdx>=0) setCurrent(currentIdx); }
+function setLive(on){ mode= on?'live':'auto'; document.body.classList.toggle('live',on); $btnLive.classList.toggle('on',on);
+  document.getElementById('loop-ind').style.visibility= on?'hidden':'visible';
+  cancelSpeech(); clearTimers();
+  if(on){ $status.textContent='live · Space/→ next · ← back'; } else { if(currentIdx<0) setCurrent(0); else setCurrent(currentIdx); } }
+
+function pickVoices(){
+  voices=window.speechSynthesis.getVoices(); $voiceSelect.innerHTML='';
+  const lp=(OPTIONS.primaryLang||'en').toLowerCase();
+  let list=voices.filter(v=>v.lang.toLowerCase().startsWith(lp)); if(list.length===0) list=voices;
+  const preferred=['Aria','Jenny','Guy','Natasha','Xiaoxiao','Yunxi','Nanjing','Google'];
+  let best=-1;
+  list.forEach((v,i)=>{ const o=document.createElement('option'); o.value=i; o.textContent=`${v.name} (${v.lang})`; $voiceSelect.appendChild(o);
+    if(best===-1) for(const n of preferred) if(v.name.includes(n)){best=i;break;} });
+  preferredVoice = best>=0 ? list[best] : (list[0]||null); if(best>=0) $voiceSelect.value=best;
+  $voiceSelect._list=list;
+}
+$voiceSelect.addEventListener('change',()=>{ preferredVoice=$voiceSelect._list[parseInt($voiceSelect.value)]; if(started&&mode!=='live'&&currentIdx>=0) setCurrent(currentIdx); });
+$rateSelect.addEventListener('change',()=>{ TTS_RATE=parseFloat($rateSelect.value); if(started&&mode!=='live'&&currentIdx>=0) setCurrent(currentIdx); });
+$btnMute.addEventListener('click',()=>setMuted(!muted));
+$btnLive.addEventListener('click',()=>setLive(mode!=='live'));
+$btnRestart.addEventListener('click',()=>{ if(started) restart(); });
+
+function start(){ if(started) return; started=true; $overlay.classList.add('hide');
+  if('speechSynthesis'in window){ try{window.speechSynthesis.resume();}catch(e){} } setCurrent(0); }
+$overlay.addEventListener('click',start);
+
+document.addEventListener('keydown',(e)=>{
+  if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT') return;
+  if(!started){ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); start(); } return; }
+  switch(e.key){
+    case ' ': e.preventDefault();
+      if(mode==='live'){ if(currentIdx<SEG.length-1) setCurrent(currentIdx+1); }
+      else if(!paused && (currentUtterance||advanceTimer||fallbackTimer)){ cancelSpeech(); clearTimers(); paused=true; $status.textContent='paused'; }
+      else { paused=false; setCurrent(currentIdx<0?0:currentIdx); } break;
+    case 'ArrowDown': case 'ArrowRight': if(mode==='live'&&currentIdx<SEG.length-1){ e.preventDefault(); setCurrent(currentIdx+1);} break;
+    case 'ArrowUp': case 'ArrowLeft': if(mode==='live'&&currentIdx>0){ e.preventDefault(); setCurrent(currentIdx-1);} break;
+    case 's': case 'S': setMuted(!muted); break;
+    case 'm': case 'M': setLive(mode!=='live'); break;
+    case 'r': case 'R': restart(); break;
+    case 'f': case 'F': if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); break;
+  }
+});
+
+if('speechSynthesis'in window){ pickVoices(); window.speechSynthesis.onvoiceschanged=pickVoices; }
+</script>
+</body>
+</html>

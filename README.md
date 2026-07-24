@@ -9,6 +9,7 @@ This repository combines:
   [Fluent UI Web Components](https://github.com/microsoft/fluentui);
 - a project-level GitHub Copilot Agent Skill for repeatable deck creation;
 - Microsoft's official Playwright CLI Skill for agent-driven browser review;
+- a paired karaoke-style rehearsal page for every presentation;
 - Playwright tests for navigation, layout, and browser-console errors; and
 - GitHub Actions that validate every change and deploy `main` to GitHub Pages.
 
@@ -35,9 +36,19 @@ Open the URL printed by Vite. The catalogue links to every deck in
 npm run new -- my-talk "My talk title"
 ```
 
-Then edit `presentations/my-talk/index.html`. Keep content in semantic
+Then edit `presentations/my-talk/index.html` and `script.json`. Keep content in semantic
 `<section class="slide">` elements and reuse the layouts documented in
 [the design reference](.github/skills/create-presentation/references/design-system.md).
+
+Generate the self-contained rehearsal page with the installed
+`karaoke-prompter` skill:
+
+```bash
+npm run karaoke -- my-talk
+```
+
+The catalogue publishes both **Present** and **Rehearse** links. Edit
+`script.json`, never the generated `karaoke.html`.
 
 Keyboard controls:
 
@@ -63,8 +74,8 @@ Playwright suite against the production output.
 .claude/skills/playwright-cli/       Microsoft Playwright CLI Skill
 .github/skills/create-presentation/  Project-level presentation Agent Skill
 .github/workflows/                   CI and GitHub Pages deployment
-presentations/                       One directory per deck
-scripts/                             Deck scaffolding and catalogue generation
+presentations/                       Deck, script source, and generated karaoke
+scripts/                             Scaffolding, karaoke, and catalogue tooling
 src/                                 Shared theme and runtime
 tests/                               Browser-level quality gates
 ```

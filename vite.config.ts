@@ -1,4 +1,4 @@
-import { readdirSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 
@@ -17,6 +17,10 @@ function presentationEntries(): Record<string, string> {
         item.name,
         'index.html',
       );
+      const karaoke = resolve(presentationsRoot, item.name, 'karaoke.html');
+      if (existsSync(karaoke)) {
+        entries[`presentations/${item.name}/karaoke`] = karaoke;
+      }
     }
   }
 

@@ -1,7 +1,14 @@
 [
   {
+    "title": "AI-Native CLI: Give AI Its Own Manual",
+    "description": "Why products need an interface designed for AI, not only help designed for humans.",
+    "path": "./presentations/ai-native-cli/",
+    "rehearsalPath": "./presentations/ai-native-cli/karaoke.html"
+  },
+  {
     "title": "Welcome to Presentation Workbench",
     "description": "A short introduction to the presentation workbench.",
-    "path": "./presentations/welcome/"
+    "path": "./presentations/welcome/",
+    "rehearsalPath": "./presentations/welcome/karaoke.html"
   }
 ]

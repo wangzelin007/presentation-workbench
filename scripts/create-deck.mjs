@@ -10,7 +10,8 @@ if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
   throw new Error('The slug must use lowercase kebab-case.');
 }
 
-const target = new URL(`../presentations/${slug}/index.html`, import.meta.url);
+const deckRoot = new URL(`../presentations/${slug}/`, import.meta.url);
+const target = new URL('index.html', deckRoot);
 
 try {
   await access(target);
@@ -43,9 +44,32 @@ const template = await readFile(
 );
 const html = template.replaceAll('{{TITLE}}', escapeHtml(title));
 
-await mkdir(new URL(`../presentations/${slug}/`, import.meta.url), {
-  recursive: true,
-});
+await mkdir(deckRoot, { recursive: true });
 await writeFile(target, html);
+await writeFile(
+  new URL('script.json', deckRoot),
+  `${JSON.stringify(
+    {
+      options: {
+        title: `${title} rehearsal`,
+        highlightColor: '#479ef5',
+        readQuestions: false,
+        showSecondary: false,
+        primaryLang: 'en',
+        rate: 0.95,
+      },
+      segments: [
+        { kind: 'ask', tag: 'SLIDE 1', primary: title },
+        {
+          kind: 'say',
+          primary: 'Add the opening narration for this slide.',
+        },
+      ],
+    },
+    null,
+    2,
+  )}\n`,
+);
 
-console.log(`Created presentations/${slug}/index.html`);
+console.log(`Created presentations/${slug}/index.html and script.json`);
+console.log(`Next: npm run karaoke -- ${slug}`);

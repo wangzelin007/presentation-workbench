@@ -5,6 +5,7 @@ import catalogue from '../presentations/catalog.json';
 type CatalogueEntry = {
   description: string;
   path: string;
+  rehearsalPath?: string;
   title: string;
 };
 
@@ -15,9 +16,8 @@ if (!container) {
 }
 
 for (const entry of catalogue as CatalogueEntry[]) {
-  const card = document.createElement('a');
+  const card = document.createElement('article');
   card.className = 'catalogue-card';
-  card.href = entry.path;
 
   const label = document.createElement('span');
   label.className = 'eyebrow';
@@ -29,6 +29,22 @@ for (const entry of catalogue as CatalogueEntry[]) {
   const description = document.createElement('p');
   description.textContent = entry.description;
 
-  card.append(label, title, description);
+  const actions = document.createElement('div');
+  actions.className = 'catalogue-card__actions';
+
+  const present = document.createElement('a');
+  present.href = entry.path;
+  present.textContent = 'Present';
+
+  actions.append(present);
+
+  if (entry.rehearsalPath) {
+    const rehearse = document.createElement('a');
+    rehearse.href = entry.rehearsalPath;
+    rehearse.textContent = 'Rehearse';
+    actions.append(rehearse);
+  }
+
+  card.append(label, title, description, actions);
   container.append(card);
 }

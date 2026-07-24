@@ -5,8 +5,45 @@ test('catalogue lists the example presentation', async ({ page }) => {
 
   await expect(page).toHaveTitle('Presentation Workbench');
   await expect(
-    page.getByRole('link', { name: /Welcome to Presentation Workbench/ }),
+    page.getByRole('heading', { name: 'Welcome to Presentation Workbench' }),
   ).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Rehearse' }).first()).toBeVisible();
+});
+
+test('karaoke rehearsal is generated and interactive', async ({ page }) => {
+  const consoleErrors: string[] = [];
+  page.on('console', (message) => {
+    if (message.type() === 'error') {
+      consoleErrors.push(message.text());
+    }
+  });
+
+  await page.goto('/presentations/ai-native-cli/karaoke.html');
+
+  await expect(page).toHaveTitle('AI-Native CLI rehearsal');
+  await expect(page.getByText('Tap to start')).toBeVisible();
+  await expect(page.locator('.seg')).toHaveCount(31);
+  await expect(page.locator('body')).not.toContainText('__SEGMENTS__');
+  expect(consoleErrors).toEqual([]);
+});
+
+test('AI-native CLI remake fits every slide at 16:9', async ({ page }) => {
+  await page.goto('/presentations/ai-native-cli/');
+
+  const slides = page.locator('.slide');
+  await expect(slides).toHaveCount(9);
+
+  for (let index = 0; index < 9; index += 1) {
+    await page.goto(`/presentations/ai-native-cli/#${index + 1}`);
+    const slide = slides.nth(index);
+    await expect(slide).toBeVisible();
+    const hasOverflow = await slide.evaluate(
+      (element) =>
+        element.scrollWidth > element.clientWidth ||
+        element.scrollHeight > element.clientHeight,
+    );
+    expect(hasOverflow, `slide ${index + 1} should fit the viewport`).toBe(false);
+  }
 });
 
 test('deck supports keyboard and URL navigation without overflow', async ({

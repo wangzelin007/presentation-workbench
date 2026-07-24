@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Why products need an interface designed for AI, not only help designed for humans."
+    />
+    <title>AI-Native CLI: Give AI Its Own Manual</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="deck" aria-label="AI-Native CLI: Give AI Its Own Manual">
+      <section class="slide slide--title">
+        <div class="slide__content">
+          <p class="eyebrow">AI-NATIVE CLI</p>
+          <h1>Give AI its own manual.</h1>
+          <p>Products now serve two users: people and the agents acting for them.</p>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="slide__content wide">
+          <p class="eyebrow">THE FRICTION</p>
+          <h2>Human help makes AI walk the whole tree.</h2>
+          <div class="command-tree" aria-label="Six nested command levels">
+            <span>network</span><span>application-gateway</span><span>waf-policy</span>
+            <span>managed-rule</span><span>exclusion</span><strong>add</strong>
+          </div>
+          <p class="takeaway">Six levels. Six round trips. One typo can stop the search.</p>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="slide__content wide">
+          <p class="eyebrow">THE INTERFACE MISMATCH</p>
+          <h2>People optimize for accuracy. AI optimizes for relevance.</h2>
+          <div class="comparison">
+            <article>
+              <span class="comparison__number">01</span>
+              <h3>A person navigates</h3>
+              <p>“I know the command. Give me the exact page.”</p>
+            </article>
+            <article class="comparison__accent">
+              <span class="comparison__number">02</span>
+              <h3>An AI retrieves</h3>
+              <p>“Give me everything related enough to plan the next step.”</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="slide__content wide">
+          <p class="eyebrow">A SMALLER CONTRACT</p>
+          <h2>Collapse the tree into two machine-friendly moves.</h2>
+          <ol class="steps">
+            <li>
+              <span>1</span>
+              <div><strong>List</strong><p>Return a compact catalogue of every capability.</p></div>
+            </li>
+            <li>
+              <span>2</span>
+              <div><strong>Inspect</strong><p>Return complete details for fuzzy, related matches.</p></div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="slide__content wide">
+          <p class="eyebrow">THE AI MANUAL</p>
+          <h2>Expose what the product already knows.</h2>
+          <div class="tool-grid">
+            <article><span>01</span><h3>Environment</h3><p>Identity, version, and runtime state</p></article>
+            <article><span>02</span><h3>Resources</h3><p>What already exists for this user</p></article>
+            <article><span>03</span><h3>Capabilities</h3><p>Supported commands and parameters</p></article>
+            <article><span>04</span><h3>Availability</h3><p>Live constraints the model cannot know</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="slide__content wide">
+          <p class="eyebrow">ONE SOURCE OF TRUTH</p>
+          <h2>Build the tools once. Serve every AI path.</h2>
+          <div class="flow">
+            <div class="flow__source">Product tools</div>
+            <div class="flow__line" aria-hidden="true"></div>
+            <div class="flow__targets">
+              <article><span>Direct</span><strong>Built-in agent</strong></article>
+              <article><span>Open</span><strong>CLI + skill</strong></article>
+            </div>
+          </div>
+          <p class="takeaway">Same logic. Same output. Far less maintenance.</p>
+        </div>
+      </section>
+
+      <section class="slide slide--center demo-slide">
+        <div class="slide__content">
+          <p class="eyebrow">LIVE DEMO</p>
+          <h2>A model with no product knowledge can still succeed.</h2>
+          <div class="terminal">
+            <span>PS&gt;</span> create a resource group using the prototype CLI
+            <small>cache → help → correct command</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="slide__content wide">
+          <p class="eyebrow">THE PRODUCT PATTERN</p>
+          <h2>Every product needs two front doors.</h2>
+          <div class="doors">
+            <article><span>For people</span><strong>GUI · docs · human help</strong></article>
+            <div class="doors__plus">+</div>
+            <article><span>For AI</span><strong>Structured tools · stable contracts</strong></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide slide--center">
+        <div class="slide__content">
+          <p class="eyebrow">THE ASK</p>
+          <h2>Ship the AI manual with the product.</h2>
+          <p class="closing-line">Not another agent. A reliable interface for every agent.</p>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="../../src/deck.ts"></script>
+  </body>
+</html>
