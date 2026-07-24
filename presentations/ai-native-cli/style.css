@@ -40,6 +40,10 @@
   object-position: top;
 }
 
+.evidence-frame--recovery {
+  margin-top: 24px;
+}
+
 .comparison,
 .doors {
   display: grid;
@@ -111,25 +115,26 @@
 
 .tool-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 18px;
-  margin-top: 48px;
+  margin-top: 36px;
 }
 
 .tool-grid article {
-  min-height: 250px;
-  padding: 28px;
+  min-height: 160px;
+  padding: 24px 28px;
   border-radius: 14px;
   background: var(--colorNeutralBackground3, #3d3d3d);
 }
 
 .tool-grid h3 {
-  margin-top: 28px;
+  margin-top: 12px;
   font-size: 28px;
 }
 
 .tool-grid p {
-  font-size: 19px;
+  margin: 10px 0 0;
+  font-size: 22px;
 }
 
 .flow {
@@ -215,10 +220,4 @@
   color: var(--colorBrandForeground1, #479ef5);
   font-size: 56px;
   font-weight: 300;
-}
-
-@media (max-width: 1100px) {
-  .tool-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }

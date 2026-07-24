@@ -43,6 +43,30 @@ test('AI-native CLI remake fits every slide at 16:9', async ({ page }) => {
         element.scrollHeight > element.clientHeight,
     );
     expect(hasOverflow, `slide ${index + 1} should fit the viewport`).toBe(false);
+
+    const hierarchy = await slide.evaluate((element) => {
+      const heading = element.querySelector<HTMLElement>('h1, h2');
+      const prose = Array.from(
+        element.querySelectorAll<HTMLElement>(
+          '.slide__content > p:not(.eyebrow)',
+        ),
+      );
+      return {
+        heading: heading
+          ? Number.parseFloat(getComputedStyle(heading).fontSize)
+          : 0,
+        prose: prose.map((item) =>
+          Number.parseFloat(getComputedStyle(item).fontSize),
+        ),
+      };
+    });
+    expect(hierarchy.heading, `slide ${index + 1} needs a main heading`).toBeGreaterThan(0);
+    for (const proseSize of hierarchy.prose) {
+      expect(
+        hierarchy.heading,
+        `slide ${index + 1} heading must be larger than prose`,
+      ).toBeGreaterThan(proseSize);
+    }
   }
 });
 
