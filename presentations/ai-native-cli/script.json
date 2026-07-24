@@ -33,22 +33,33 @@
     {
       "kind": "ask",
       "tag": "SLIDE 2",
-      "primary": "Human help makes AI walk the whole tree.",
-      "secondary": "给人看的帮助，让 AI 走完整棵树。"
+      "primary": "One command starts three lookups away.",
+      "secondary": "一条命令，先从三次查找开始。"
     },
     {
       "kind": "say",
-      "primary": "Traditional command help is a navigation tree. That feels natural to a person, but it is expensive for a model.",
-      "secondary": "传统命令帮助是一棵导航树。它对人很自然，对模型却很昂贵。"
-    },
-    {
-      "kind": "say",
-      "primary": "A deeply nested command can take six lookups to discover. A small typo can stop the search completely.",
-      "secondary": "一个深层命令可能需要查六次。一个小拼写错误就会让搜索彻底停止。"
+      "primary": "This is real Azure CLI help. To find one application gateway command, the model must first inspect the top level, then network, then application gateway.",
+      "secondary": "这是真实的 Azure CLI help。为了找到一条 application gateway 命令，模型要先查顶层，再查 network，再查 application gateway。"
     },
     {
       "kind": "ask",
       "tag": "SLIDE 3",
+      "primary": "And it is still three more lookups down.",
+      "secondary": "而下面还有三次查找。"
+    },
+    {
+      "kind": "say",
+      "primary": "From there it still has to inspect WAF policy, managed rule, and exclusion before the add command finally appears.",
+      "secondary": "从这里还要继续查 WAF policy、managed rule 和 exclusion，最后才会看到 add 命令。"
+    },
+    {
+      "kind": "say",
+      "primary": "That is six round trips to discover one path. A small typo can stop the search before it gets there.",
+      "secondary": "为了发现一条路径要往返六次。一个小拼写错误就可能让搜索提前停止。"
+    },
+    {
+      "kind": "ask",
+      "tag": "SLIDE 4",
       "primary": "People optimize for accuracy. AI optimizes for relevance.",
       "secondary": "人追求精确，AI 追求相关。"
     },
@@ -64,7 +75,23 @@
     },
     {
       "kind": "ask",
-      "tag": "SLIDE 4",
+      "tag": "SLIDE 5",
+      "primary": "The model reaches for familiar syntax.",
+      "secondary": "模型会伸手去拿它熟悉的语法。"
+    },
+    {
+      "kind": "say",
+      "primary": "Here is the failure mode in practice. The model used familiar Azure CLI flags against a different command contract, and the command failed immediately.",
+      "secondary": "这就是实际失败模式。模型把熟悉的 Azure CLI 参数用在另一套命令契约上，命令立刻失败。"
+    },
+    {
+      "kind": "say",
+      "primary": "The agent then had to inspect the real contract, explain every mismatch, and rebuild the plan. Useful recovery, but avoidable work.",
+      "secondary": "agent 随后必须读取真实契约、解释每个差异并重建计划。恢复很有用，但这本来可以避免。"
+    },
+    {
+      "kind": "ask",
+      "tag": "SLIDE 6",
       "primary": "Collapse the tree into two machine-friendly moves.",
       "secondary": "把整棵树压缩成两个机器友好的动作。"
     },
@@ -85,7 +112,7 @@
     },
     {
       "kind": "ask",
-      "tag": "SLIDE 5",
+      "tag": "SLIDE 7",
       "primary": "Expose what the product already knows.",
       "secondary": "把产品已经知道的东西暴露出来。"
     },
@@ -106,7 +133,7 @@
     },
     {
       "kind": "ask",
-      "tag": "SLIDE 6",
+      "tag": "SLIDE 8",
       "primary": "Build the tools once. Serve every AI path.",
       "secondary": "工具只做一次，服务所有 AI 路径。"
     },
@@ -122,7 +149,7 @@
     },
     {
       "kind": "ask",
-      "tag": "SLIDE 7 · LIVE DEMO",
+      "tag": "SLIDE 9 · LIVE DEMO",
       "primary": "Switch to the terminal.",
       "secondary": "切换到终端。"
     },
@@ -138,7 +165,7 @@
     },
     {
       "kind": "ask",
-      "tag": "SLIDE 8",
+      "tag": "SLIDE 10",
       "primary": "Every product needs two front doors.",
       "secondary": "每个产品都需要两扇前门。"
     },
@@ -154,7 +181,7 @@
     },
     {
       "kind": "ask",
-      "tag": "SLIDE 9",
+      "tag": "SLIDE 11",
       "primary": "Ship the AI manual with the product.",
       "secondary": "让 AI 说明书随产品一起交付。"
     },

@@ -9,33 +9,35 @@
   font-weight: 600;
 }
 
-.command-tree {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin: 56px 0 36px;
+.evidence-frame {
+  margin: 34px 0 0;
 }
 
-.command-tree span,
-.command-tree strong {
-  padding: 16px 18px;
+.slide--evidence h2 {
+  max-width: 24ch;
+  font-size: clamp(38px, 3.5vw, 56px);
+}
+
+.evidence-frame img {
+  display: block;
+  width: 100%;
+  max-height: 48vh;
   border: 1px solid var(--colorNeutralStroke2, #525252);
-  border-radius: 8px;
-  color: var(--colorNeutralForeground2, #d6d6d6);
-  font: 600 clamp(15px, 1.2vw, 21px) "Cascadia Code", Consolas, monospace;
-  background: var(--colorNeutralBackground3, #3d3d3d);
+  border-radius: 12px;
+  object-fit: contain;
+  background: #080b0f;
+  box-shadow: var(--shadow64, 0 32px 64px rgb(0 0 0 / 28%));
 }
 
-.command-tree span::after {
-  margin-left: 20px;
-  color: var(--colorBrandForeground1, #479ef5);
-  content: "›";
+.evidence-frame figcaption {
+  margin-top: 14px;
+  color: var(--colorNeutralForeground3, #adadad);
+  font-size: 16px;
 }
 
-.command-tree strong {
-  border-color: var(--colorBrandBackground, #479ef5);
-  color: #fff;
-  background: var(--colorBrandBackground, #0f6cbd);
+.evidence-frame--recovery img {
+  max-height: 38vh;
+  object-position: top;
 }
 
 .comparison,
@@ -216,10 +218,6 @@
 }
 
 @media (max-width: 1100px) {
-  .command-tree {
-    flex-wrap: wrap;
-  }
-
   .tool-grid {
     grid-template-columns: repeat(2, 1fr);
   }

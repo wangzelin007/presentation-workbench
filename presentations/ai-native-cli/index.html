@@ -20,15 +20,31 @@
         </div>
       </section>
 
-      <section class="slide">
+      <section class="slide slide--evidence">
         <div class="slide__content wide">
-          <p class="eyebrow">THE FRICTION</p>
-          <h2>Human help makes AI walk the whole tree.</h2>
-          <div class="command-tree" aria-label="Six nested command levels">
-            <span>network</span><span>application-gateway</span><span>waf-policy</span>
-            <span>managed-rule</span><span>exclusion</span><strong>add</strong>
-          </div>
-          <p class="takeaway">Six levels. Six round trips. One typo can stop the search.</p>
+          <p class="eyebrow">REAL AZURE CLI HELP · LEVELS 1–3</p>
+          <h2>One command starts three lookups away.</h2>
+          <figure class="evidence-frame">
+            <img
+              src="./assets/help-levels-1-3.png"
+              alt="Azure CLI help output progressing from the top-level command list through network to application-gateway."
+            />
+            <figcaption>Actual `az --help` output, captured level by level.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="slide slide--evidence">
+        <div class="slide__content wide">
+          <p class="eyebrow">REAL AZURE CLI HELP · LEVELS 4–6</p>
+          <h2>And it is still three more lookups down.</h2>
+          <figure class="evidence-frame">
+            <img
+              src="./assets/help-levels-4-6.png"
+              alt="Azure CLI help output progressing through waf-policy, managed-rule, and exclusion to finally reveal the add command."
+            />
+            <figcaption>Six round trips to discover one valid command path.</figcaption>
+          </figure>
         </div>
       </section>
 
@@ -48,6 +64,20 @@
               <p>“Give me everything related enough to plan the next step.”</p>
             </article>
           </div>
+        </div>
+      </section>
+
+      <section class="slide slide--evidence">
+        <div class="slide__content wide">
+          <p class="eyebrow">THE COST OF GUESSING</p>
+          <h2>The model reaches for familiar syntax—and the product must recover.</h2>
+          <figure class="evidence-frame evidence-frame--recovery">
+            <img
+              src="./assets/syntax-recovery.png"
+              alt="Terminal output showing a VM create command fail because classic Azure CLI parameters were used, followed by the agent identifying the correct contract."
+            />
+            <figcaption>Real recovery: classic CLI flags fail against a different command contract.</figcaption>
+          </figure>
         </div>
       </section>
 

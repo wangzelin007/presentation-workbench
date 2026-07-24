@@ -22,7 +22,7 @@ test('karaoke rehearsal is generated and interactive', async ({ page }) => {
 
   await expect(page).toHaveTitle('AI-Native CLI rehearsal');
   await expect(page.getByText('Tap to start')).toBeVisible();
-  await expect(page.locator('.seg')).toHaveCount(31);
+  await expect(page.locator('.seg')).toHaveCount(36);
   await expect(page.locator('body')).not.toContainText('__SEGMENTS__');
   expect(consoleErrors).toEqual([]);
 });
@@ -31,9 +31,9 @@ test('AI-native CLI remake fits every slide at 16:9', async ({ page }) => {
   await page.goto('/presentations/ai-native-cli/');
 
   const slides = page.locator('.slide');
-  await expect(slides).toHaveCount(9);
+  await expect(slides).toHaveCount(11);
 
-  for (let index = 0; index < 9; index += 1) {
+  for (let index = 0; index < 11; index += 1) {
     await page.goto(`/presentations/ai-native-cli/#${index + 1}`);
     const slide = slides.nth(index);
     await expect(slide).toBeVisible();
