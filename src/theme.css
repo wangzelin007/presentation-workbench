@@ -1,0 +1,336 @@
+:root {
+  color: var(--colorNeutralForeground1, #ffffff);
+  background: var(--colorNeutralBackground1, #292929);
+  font-family: "Segoe UI Variable Display", "Segoe UI", Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+.deck {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 88% 10%, rgb(71 158 245 / 18%), transparent 28%),
+    var(--colorNeutralBackground1, #292929);
+}
+
+.slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: clamp(48px, 6vw, 112px);
+  overflow: hidden;
+}
+
+.slide[data-active] {
+  display: grid;
+  align-content: center;
+  animation: slide-in 240ms cubic-bezier(0.33, 0, 0.67, 1);
+}
+
+.slide::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 8px;
+  content: "";
+  background: var(--colorBrandBackground, #479ef5);
+}
+
+.slide--title {
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 0.55fr);
+  gap: clamp(48px, 8vw, 144px);
+}
+
+.slide--title::after {
+  align-self: stretch;
+  min-height: 48vh;
+  border-radius: 24px;
+  content: "";
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 14%), transparent 55%),
+    var(--colorBrandBackground, #0f6cbd);
+  box-shadow: var(--shadow64, 0 32px 64px rgb(0 0 0 / 28%));
+}
+
+.slide--columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(32px, 5vw, 80px);
+}
+
+.slide--center {
+  justify-items: center;
+  text-align: center;
+}
+
+.slide__content {
+  max-width: 1100px;
+}
+
+.slide h1,
+.slide h2,
+.slide h3,
+.catalogue h1,
+.catalogue h2,
+.catalogue h3 {
+  margin: 0;
+  color: var(--colorNeutralForeground1, #ffffff);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+
+.slide h1 {
+  max-width: 14ch;
+  font-size: clamp(56px, 7vw, 112px);
+  line-height: 0.98;
+}
+
+.slide h2 {
+  max-width: 18ch;
+  font-size: clamp(44px, 5vw, 80px);
+  line-height: 1.04;
+}
+
+.slide h3 {
+  font-size: clamp(24px, 2.2vw, 36px);
+}
+
+.slide p,
+.slide li {
+  color: var(--colorNeutralForeground2, #d6d6d6);
+  font-size: clamp(22px, 2vw, 34px);
+  line-height: 1.45;
+}
+
+.slide ul {
+  display: grid;
+  gap: 0.55em;
+  max-width: 32ch;
+  padding-left: 1.15em;
+}
+
+.eyebrow {
+  margin: 0 0 20px;
+  color: var(--colorBrandForeground1, #479ef5);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.metric {
+  display: block;
+  margin-bottom: 16px;
+  color: var(--colorBrandForeground1, #479ef5);
+  font-size: clamp(64px, 8vw, 128px);
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+}
+
+.panel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.panel {
+  min-height: 240px;
+  padding: 32px;
+  border: 1px solid var(--colorNeutralStroke2, #525252);
+  border-radius: 16px;
+  background: var(--colorNeutralBackground3, #3d3d3d);
+  box-shadow: var(--shadow16, 0 8px 16px rgb(0 0 0 / 20%));
+}
+
+.panel p {
+  margin-bottom: 0;
+  font-size: clamp(18px, 1.5vw, 26px);
+}
+
+.deck-chrome {
+  position: fixed;
+  z-index: 10;
+  right: clamp(24px, 3vw, 56px);
+  bottom: clamp(20px, 2vw, 40px);
+  left: clamp(24px, 3vw, 56px);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 20px;
+  align-items: center;
+}
+
+.deck-chrome__position {
+  min-width: 52px;
+  margin: 0;
+  color: var(--colorNeutralForeground3, #adadad);
+  font-size: 14px;
+}
+
+.deck-chrome__progress {
+  height: 2px;
+  overflow: hidden;
+  background: var(--colorNeutralStroke2, #525252);
+}
+
+.deck-chrome__progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--colorBrandBackground, #479ef5);
+  transition: width 180ms ease;
+}
+
+.deck-chrome__controls {
+  display: flex;
+  gap: 8px;
+}
+
+.deck-chrome button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--colorNeutralStroke1, #666666);
+  border-radius: 6px;
+  color: var(--colorNeutralForeground1, #ffffff);
+  background: var(--colorNeutralBackground4, #474747);
+  cursor: pointer;
+}
+
+.deck-chrome button:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+.catalogue-page {
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgb(71 158 245 / 12%), transparent 420px),
+    var(--colorNeutralBackground1, #292929);
+}
+
+.catalogue {
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 104px 0;
+}
+
+.catalogue__header {
+  max-width: 850px;
+  margin-bottom: 96px;
+}
+
+.catalogue h1 {
+  font-size: clamp(54px, 8vw, 104px);
+  line-height: 0.98;
+}
+
+.catalogue h2 {
+  margin-bottom: 32px;
+  font-size: 34px;
+}
+
+.catalogue__lede {
+  max-width: 680px;
+  color: var(--colorNeutralForeground2, #d6d6d6);
+  font-size: 24px;
+  line-height: 1.5;
+}
+
+.catalogue__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.catalogue-card {
+  min-height: 240px;
+  padding: 32px;
+  border: 1px solid var(--colorNeutralStroke2, #525252);
+  border-radius: 16px;
+  color: inherit;
+  text-decoration: none;
+  background: var(--colorNeutralBackground3, #3d3d3d);
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.catalogue-card:hover {
+  border-color: var(--colorBrandStroke1, #479ef5);
+  transform: translateY(-4px);
+}
+
+.catalogue-card h3 {
+  font-size: 30px;
+}
+
+.catalogue-card p:last-child {
+  color: var(--colorNeutralForeground2, #d6d6d6);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+
+@media (max-width: 800px) {
+  .slide--title,
+  .slide--columns {
+    grid-template-columns: 1fr;
+  }
+
+  .slide--title::after {
+    display: none;
+  }
+
+  .panel-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  .deck {
+    height: auto;
+    overflow: visible;
+  }
+
+  .slide,
+  .slide[hidden] {
+    display: grid;
+    width: 13.333in;
+    height: 7.5in;
+    break-after: page;
+  }
+
+  .deck-chrome {
+    display: none;
+  }
+}

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A catalogue of Fluent-inspired HTML presentations."
+    />
+    <title>Presentation Workbench</title>
+  </head>
+  <body class="catalogue-page">
+    <main class="catalogue">
+      <header class="catalogue__header">
+        <p class="eyebrow">PRESENTATION WORKBENCH</p>
+        <h1>Ideas, presented with clarity.</h1>
+        <p class="catalogue__lede">
+          A reusable system for creating, reviewing, and publishing consistent
+          HTML presentations.
+        </p>
+      </header>
+      <section aria-labelledby="presentations-heading">
+        <h2 id="presentations-heading">Presentations</h2>
+        <div class="catalogue__grid" data-catalogue></div>
+      </section>
+    </main>
+    <script type="module" src="./src/catalogue.ts"></script>
+  </body>
+</html>
