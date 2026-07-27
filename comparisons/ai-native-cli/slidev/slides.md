@@ -14,6 +14,7 @@ fonts:
   serif: 'Inter'
   mono: 'JetBrains Mono'
 layout: cover
+background: '#0f172a'
 ---
 
 <div class="uppercase tracking-widest text-sm opacity-70 mb-6">Early design sharing</div>
