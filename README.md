@@ -1,103 +1,67 @@
 # Presentation Workbench
 
-Build, review, and publish consistent HTML presentations with a reusable
-Fluent-inspired design system.
+A focused workflow for producing a Frontend Slides HTML presentation and its
+paired karaoke rehearsal page.
 
-This repository combines:
+## One workflow
 
-- a shared presentation runtime and theme built with Microsoft's
-  [Fluent UI Web Components](https://github.com/microsoft/fluentui);
-- a project-level GitHub Copilot Agent Skill for repeatable deck creation;
-- Microsoft's official Playwright CLI Skill for agent-driven browser review;
-- a paired karaoke-style rehearsal page for every presentation;
-- Playwright tests for navigation, layout, and browser-console errors; and
-- GitHub Actions that validate every change and deploy `main` to GitHub Pages.
+- **Audience view:** [Frontend Slides](https://github.com/zarazhangrui/frontend-slides)
+  fixed-stage HTML with inline editing and PDF export.
+- **Speaker view:** `karaoke-prompter` self-contained HTML with browser TTS,
+  word highlighting, auto-scroll, mute/live modes, and looping.
+- **Validation:** Playwright captures every slide and checks navigation,
+  overflow, browser errors, and generated rehearsal output.
+- **Publishing:** GitHub Actions deploys the reviewed files to GitHub Pages.
 
-Microsoft does not currently publish an official HTML presentation generator or
-presentation Agent Skill. This repository composes Microsoft's official Fluent
-UI and Playwright projects into an opinionated workflow instead.
+The project-level orchestration is in
+`.github/skills/create-presentation/SKILL.md`. A pinned MIT snapshot of the
+upstream Frontend Slides skill is stored in `.github/skills/frontend-slides/`.
 
-## Quick start
+## Final AI-Native CLI deck
 
-Requirements: Node.js 22 or newer.
+```text
+presentations/ai-native-cli/
+├── index.html         audience presentation
+├── script.json        editable bilingual rehearsal source
+├── karaoke.html       generated speaker page
+├── presentation.pdf  reviewed static export
+└── assets/            original evidence screenshots
+```
+
+Online catalogue:
+https://wangzelin007.github.io/presentation-workbench/
+
+## Local review
+
+Requirements: Node.js 22 or newer and Python 3.
 
 ```bash
 npm install
 npx playwright install chromium
+npm run karaoke -- ai-native-cli
+npm run check
+npm run review
 npm run dev
 ```
 
-Open the URL printed by Vite. The catalogue links to every deck in
-`presentations/`.
+Open `index.html` for the audience. Open `karaoke.html` in a separate browser
+window for rehearsal or live prompting. In Teams or Zoom, share only the
+audience browser window.
 
-The [engine comparison](comparisons/ai-native-cli/) renders the same AI-Native
-CLI talk through Frontend Slides, Slidev, reveal.js, Presenton, Banana Slides,
-and PPTAgent so their native workflows and presenter features can be judged
-side by side.
-
-## Create a presentation
-
-```bash
-npm run new -- my-talk "My talk title"
-```
-
-Then edit `presentations/my-talk/index.html` and `script.json`. Keep content in semantic
-`<section class="slide">` elements and reuse the layouts documented in
-[the design reference](.github/skills/create-presentation/references/design-system.md).
-
-Generate the self-contained rehearsal page with the installed
-`karaoke-prompter` skill:
-
-```bash
-npm run karaoke -- my-talk
-```
-
-The catalogue publishes both **Present** and **Rehearse** links. Edit
-`script.json`, never the generated `karaoke.html`.
-
-Keyboard controls:
+## Karaoke controls
 
 | Key | Action |
 | --- | --- |
-| `ArrowRight`, `ArrowDown`, `PageDown`, `Space` | Next slide |
-| `ArrowLeft`, `ArrowUp`, `PageUp` | Previous slide |
-| `Home` / `End` | First / last slide |
-| `F` | Toggle fullscreen |
-
-## Quality checks
-
-```bash
-npm run check
-```
-
-This command type-checks the source, builds every HTML entry point, and runs the
-Playwright suite against the production output.
-
-## Repository layout
-
-```text
-.claude/skills/playwright-cli/       Microsoft Playwright CLI Skill
-.github/skills/create-presentation/  Project-level presentation Agent Skill
-.github/workflows/                   CI and GitHub Pages deployment
-presentations/                       Deck, script source, and generated karaoke
-scripts/                             Scaffolding, karaoke, and catalogue tooling
-src/                                 Shared theme and runtime
-tests/                               Browser-level quality gates
-```
-
-## Official building blocks
-
-- [Microsoft Fluent UI](https://github.com/microsoft/fluentui) — MIT
-- [Microsoft Playwright](https://github.com/microsoft/playwright) — Apache-2.0
-- [Microsoft Playwright CLI Skills](https://github.com/microsoft/playwright-cli)
-  — optional agent-driven visual review
-- [GitHub Pages deployment actions](https://github.com/actions/deploy-pages)
+| `Space` | Pause/resume |
+| `S` | Mute TTS for live delivery or recording |
+| `M` | Manual/live mode |
+| `R` | Restart |
+| `F` | Fullscreen |
 
 ## Trademark notice
 
-This is an independent open-source project. It is not affiliated with,
-sponsored by, or endorsed by Microsoft. Microsoft, Fluent, and related marks
-are trademarks of the Microsoft group of companies.
+This independent open-source project is not affiliated with, sponsored by, or
+endorsed by Microsoft.
 
 ## License
 

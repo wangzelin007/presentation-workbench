@@ -14,8 +14,8 @@ export default defineConfig({
     viewport: { width: 1600, height: 900 },
   },
   webServer: {
-    command: 'node scripts/serve-pages.mjs',
+    command: 'npm run preview -- --host 127.0.0.1',
     reuseExistingServer: !process.env.CI,
-    url: 'http://127.0.0.1:4173/presentation-workbench/',
+    url: 'http://127.0.0.1:4173',
   },
 });

@@ -1,0 +1,115 @@
+:root {
+  color: #111111;
+  background: #fdfae7;
+  font-family: Inter, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    linear-gradient(rgb(30 43 250 / 5%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(30 43 250 / 5%) 1px, transparent 1px),
+    #fdfae7;
+  background-size: 32px 32px;
+}
+
+.catalogue {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 96px 0;
+}
+
+.catalogue__header {
+  max-width: 900px;
+  margin-bottom: 80px;
+}
+
+.eyebrow {
+  margin: 0 0 18px;
+  color: #1e2bfa;
+  font: 700 14px/1 "Space Grotesk", "Segoe UI", sans-serif;
+  letter-spacing: 0.12em;
+}
+
+.catalogue h1,
+.catalogue h2,
+.catalogue h3 {
+  margin: 0;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+.catalogue h1 {
+  max-width: 11ch;
+  font-size: clamp(56px, 8vw, 104px);
+  line-height: 0.96;
+  letter-spacing: -0.055em;
+}
+
+.catalogue h2 {
+  margin-bottom: 28px;
+  font-size: 32px;
+}
+
+.catalogue__lede {
+  max-width: 650px;
+  color: #6b6b6b;
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+.catalogue__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.catalogue-card {
+  display: flex;
+  min-height: 260px;
+  flex-direction: column;
+  padding: 30px;
+  border: 1.5px solid rgb(30 43 250 / 20%);
+  border-radius: 14px;
+  background: rgb(30 43 250 / 4%);
+}
+
+.catalogue-card h3 {
+  font-size: 30px;
+  letter-spacing: -0.025em;
+}
+
+.catalogue-card > p {
+  color: #6b6b6b;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.catalogue-card__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 22px;
+}
+
+.catalogue-card__actions a {
+  padding: 9px 15px;
+  border: 1px solid rgb(30 43 250 / 30%);
+  border-radius: 7px;
+  color: #111111;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.catalogue-card__actions a:first-child {
+  border-color: #1e2bfa;
+  color: #ffffff;
+  background: #1e2bfa;
+}

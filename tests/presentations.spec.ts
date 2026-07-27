@@ -1,18 +1,18 @@
 import { expect, test } from '@playwright/test';
 
-const pagesRoot = '/presentation-workbench';
+test('catalogue exposes the final deck and rehearsal', async ({ page }) => {
+  await page.goto('/');
 
-test('catalogue lists the example presentation', async ({ page }) => {
-  await page.goto(`${pagesRoot}/`);
-
-  await expect(page).toHaveTitle('Presentation Workbench');
   await expect(
-    page.getByRole('heading', { name: 'Welcome to Presentation Workbench' }),
+    page.getByRole('heading', {
+      name: 'AI-Native CLI — Give AI Its Own Manual',
+    }),
   ).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Rehearse' }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Present' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Rehearse' })).toBeVisible();
 });
 
-test('karaoke rehearsal is generated and interactive', async ({ page }) => {
+test('Frontend Slides deck is complete and editable', async ({ page }) => {
   const consoleErrors: string[] = [];
   page.on('console', (message) => {
     if (message.type() === 'error') {
@@ -20,92 +20,58 @@ test('karaoke rehearsal is generated and interactive', async ({ page }) => {
     }
   });
 
-  await page.goto(`${pagesRoot}/presentations/ai-native-cli/karaoke.html`);
+  await page.goto('/presentations/ai-native-cli/');
+  const slides = page.locator('.slide');
+  await expect(slides).toHaveCount(11);
+  await expect(slides.first()).toHaveClass(/active/);
+
+  await page.keyboard.press('ArrowRight');
+  await expect(slides.nth(1)).toHaveClass(/active/);
+  await expect(page.locator('#slideCounter')).toHaveText('02 / 11');
+
+  await page.keyboard.press('e');
+  await expect(page.locator('#editToggle')).toHaveClass(/active/);
+  await expect(page.locator('[data-editable]').first()).toHaveAttribute(
+    'contenteditable',
+    'true',
+  );
+
+  expect(consoleErrors).toEqual([]);
+});
+
+test('every Frontend Slides page fits its fixed stage', async ({ page }) => {
+  await page.goto('/presentations/ai-native-cli/');
+  const slides = page.locator('.slide');
+
+  for (let index = 0; index < 11; index += 1) {
+    await page.keyboard.press('Home');
+    for (let step = 0; step < index; step += 1) {
+      await page.keyboard.press('ArrowRight');
+    }
+    const slide = slides.nth(index);
+    await expect(slide).toHaveClass(/active/);
+    const overflow = await slide.evaluate(
+      (element) =>
+        element.scrollWidth > element.clientWidth ||
+        element.scrollHeight > element.clientHeight,
+    );
+    expect(overflow, `slide ${index + 1} should not overflow`).toBe(false);
+  }
+});
+
+test('karaoke rehearsal is generated and interactive', async ({ page }) => {
+  await page.goto('/presentations/ai-native-cli/karaoke.html');
 
   await expect(page).toHaveTitle('AI-Native CLI rehearsal');
   await expect(page.getByText('Tap to start')).toBeVisible();
   await expect(page.locator('.seg')).toHaveCount(36);
   await expect(page.locator('body')).not.toContainText('__SEGMENTS__');
-  expect(consoleErrors).toEqual([]);
 });
 
-test('AI-native CLI remake fits every slide at 16:9', async ({ page }) => {
-  await page.goto(`${pagesRoot}/presentations/ai-native-cli/`);
-
-  const slides = page.locator('.slide');
-  await expect(slides).toHaveCount(11);
-
-  for (let index = 0; index < 11; index += 1) {
-    await page.goto(
-      `${pagesRoot}/presentations/ai-native-cli/#${index + 1}`,
-    );
-    const slide = slides.nth(index);
-    await expect(slide).toBeVisible();
-    const hasOverflow = await slide.evaluate(
-      (element) =>
-        element.scrollWidth > element.clientWidth ||
-        element.scrollHeight > element.clientHeight,
-    );
-    expect(hasOverflow, `slide ${index + 1} should fit the viewport`).toBe(false);
-
-    const hierarchy = await slide.evaluate((element) => {
-      const heading = element.querySelector<HTMLElement>('h1, h2');
-      const prose = Array.from(
-        element.querySelectorAll<HTMLElement>(
-          '.slide__content > p:not(.eyebrow)',
-        ),
-      );
-      return {
-        heading: heading
-          ? Number.parseFloat(getComputedStyle(heading).fontSize)
-          : 0,
-        prose: prose.map((item) =>
-          Number.parseFloat(getComputedStyle(item).fontSize),
-        ),
-      };
-    });
-    expect(hierarchy.heading, `slide ${index + 1} needs a main heading`).toBeGreaterThan(0);
-    for (const proseSize of hierarchy.prose) {
-      expect(
-        hierarchy.heading,
-        `slide ${index + 1} heading must be larger than prose`,
-      ).toBeGreaterThan(proseSize);
-    }
-  }
-});
-
-test('deck supports keyboard and URL navigation without overflow', async ({
-  page,
-}) => {
-  const consoleErrors: string[] = [];
-  page.on('console', (message) => {
-    if (message.type() === 'error') {
-      consoleErrors.push(message.text());
-    }
-  });
-
-  await page.goto(`${pagesRoot}/presentations/welcome/`);
-
-  const slides = page.locator('.slide');
-  await expect(slides).toHaveCount(4);
-  await expect(slides.nth(0)).toBeVisible();
-  await expect(page).toHaveURL(/#1$/);
-
-  await page.keyboard.press('ArrowRight');
-  await expect(slides.nth(1)).toBeVisible();
-  await expect(page).toHaveURL(/#2$/);
-
-  await page.keyboard.press('End');
-  await expect(slides.nth(3)).toBeVisible();
-  await expect(page).toHaveURL(/#4$/);
-
-  const hasOverflow = await page.evaluate(
-    () =>
-      document.documentElement.scrollWidth >
-        document.documentElement.clientWidth ||
-      document.documentElement.scrollHeight >
-        document.documentElement.clientHeight,
+test('reviewed PDF is published', async ({ request }) => {
+  const response = await request.get(
+    '/presentations/ai-native-cli/presentation.pdf',
   );
-  expect(hasOverflow).toBe(false);
-  expect(consoleErrors).toEqual([]);
+  expect(response.ok()).toBe(true);
+  expect(response.headers()['content-type']).toContain('application/pdf');
 });

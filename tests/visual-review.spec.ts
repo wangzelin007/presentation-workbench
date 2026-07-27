@@ -14,7 +14,7 @@ const catalogue = JSON.parse(
 
 for (const entry of catalogue) {
   test(`capture every slide: ${entry.title}`, async ({ page }) => {
-    const route = `/presentation-workbench/${entry.path.replace(/^\.\//, '')}`;
+    const route = entry.path;
     const slug = route.split('/').filter(Boolean).at(-1);
     if (!slug) {
       throw new Error(`Could not derive a slug from "${entry.path}".`);
@@ -29,7 +29,9 @@ for (const entry of catalogue) {
     expect(count).toBeGreaterThan(0);
 
     for (let index = 0; index < count; index += 1) {
-      await page.goto(`${route}#${index + 1}`);
+      if (index > 0) {
+        await page.keyboard.press('ArrowRight');
+      }
       const slide = slides.nth(index);
       await expect(slide).toBeVisible();
       const images = slide.locator('img');
@@ -45,7 +47,7 @@ for (const entry of catalogue) {
           )
           .toBe(true);
       }
-      await page.waitForTimeout(150);
+      await page.waitForTimeout(900);
       await page.screenshot({
         path: resolve(output, `slide-${String(index + 1).padStart(2, '0')}.png`),
       });

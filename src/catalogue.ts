@@ -1,5 +1,4 @@
-import './fluent.js';
-import './theme.css';
+import './catalogue.css';
 import catalogue from '../presentations/catalog.json';
 
 type CatalogueEntry = {

@@ -1,80 +1,85 @@
 ---
 name: create-presentation
-description: Create or revise an HTML presentation in this repository using the shared Fluent-inspired design system, semantic slide layouts, and required browser validation.
+description: Create or revise a presentation using the vendored Frontend Slides skill, then generate its paired karaoke rehearsal page.
 license: MIT
 ---
 
 # Create Presentation
 
-Use this skill whenever a user asks to create, import, restyle, or revise a
-presentation in this repository.
+This repository has one presentation workflow:
 
-## Workflow
+1. **Frontend Slides** creates the audience-facing HTML deck.
+2. **karaoke-prompter** creates the speaker's rehearsal and live prompt page.
 
-1. Read `references/design-system.md` before changing slide markup.
-2. Inventory every source asset before outlining. Open screenshots, diagrams,
-   videos, and prior decks; record which claims have real evidence. Never
-   replace available evidence with a generic card or decorative shape.
-3. Review `presentations/welcome/index.html` for the current supported layouts.
-4. For a new deck, scaffold it with:
+Do not introduce another slide engine, shared deck runtime, or presenter mode.
 
-   ```bash
-   npm run new -- <kebab-case-slug> "<Presentation title>"
-   ```
+## Required workflow
 
-5. Turn the source material into a story before styling:
-   - one idea per slide;
-   - a clear opening, evidence-led middle, and explicit close;
-   - assertion-style headings rather than topic labels;
-   - short body copy that can be read from the back of a room.
-6. Use semantic HTML inside `<section class="slide">`. Reuse shared classes;
-   do not add deck-local CSS unless the shared system cannot express a genuine
-   content need.
-7. Keep all presentation code self-contained in this repository. Do not load
-   unpinned scripts, fonts, or UI libraries from a CDN.
-8. Add meaningful alt text to informative images and empty alt text to purely
-   decorative images.
-9. Write the full spoken script in the deck's `script.json`. Use one `ask`
-   segment as the silent slide cue, followed by one or more `say` segments.
-   English practice scripts may include Chinese in `secondary`; secondary text
-   is shown but never read.
-10. Invoke the installed `karaoke-prompter` skill, then build the paired
-   self-contained rehearsal page:
+1. Read `../frontend-slides/SKILL.md` and follow its fixed-stage, content,
+   image, animation, accessibility, editing, and export requirements.
+2. For the repository's consistent house style, use
+   `../frontend-slides/bold-template-pack/templates/blue-professional/design.md`
+   unless the user explicitly asks to explore another visual direction.
+3. Inventory and inspect every source screenshot before outlining. Design the
+   story around available evidence instead of replacing it with generic cards.
+4. Generate the final deck as
+   `presentations/<slug>/index.html`:
+   - one self-contained Frontend Slides HTML file;
+   - fixed 1920×1080 stage scaled uniformly to the viewport;
+   - inline editing and HTML export enabled;
+   - local images under `presentations/<slug>/assets/`;
+   - no separate framework or repository-owned visual runtime.
+5. Write the complete spoken script in
+   `presentations/<slug>/script.json`. Use one silent `ask` segment as each
+   slide cue followed by its spoken `say` segments. English practice scripts
+   may include Chinese in `secondary`.
+6. Invoke the installed `karaoke-prompter` skill and generate the paired page:
 
    ```bash
    npm run karaoke -- <slug>
    ```
 
-   Never hand-edit `karaoke.html`; change `script.json` and regenerate it.
-11. Run `npm run check`, then `npm run review`.
-12. Open and inspect every PNG in `artifacts/visual-review/<slug>/`; checking a
-    few representative slides is not sufficient. Verify visual purpose,
-    hierarchy, evidence readability, alignment, and pacing—not only overflow.
-13. Perform a visual pass of `karaoke.html` at 1600x900.
-    The preferred agent workflow is the
-   official Microsoft Playwright CLI skill vendored in
-   `.claude/skills/playwright-cli/`:
+   `script.json` is the source; never hand-edit generated `karaoke.html`.
+7. Run:
 
    ```bash
-   npm install -g @playwright/cli@latest
-   playwright-cli open http://127.0.0.1:4173/presentations/<slug>/
-   playwright-cli resize 1600 900
-   playwright-cli screenshot --hires
+   npm run check
+   npm run review
    ```
 
-14. Fix overflow, weak hierarchy, low contrast, pacing problems, and console errors before
-    considering the deck complete.
+8. Inspect every PNG in `artifacts/visual-review/<slug>/`. Automated overflow
+   checks do not approve composition, evidence readability, or hierarchy.
+9. Export the reviewed deck to
+   `presentations/<slug>/presentation.pdf` with the vendored Frontend Slides
+   export script when a PDF is requested.
+
+## Delivery
+
+Every completed presentation contains:
+
+```text
+presentations/<slug>/
+├── index.html        Frontend Slides audience view
+├── script.json       editable rehearsal source
+├── karaoke.html      generated speaker view
+├── presentation.pdf optional static export
+└── assets/           screenshots and other evidence
+```
+
+The audience sees `index.html`. The speaker uses `karaoke.html` in a separate
+window. Screen sharing targets only the audience browser window.
 
 ## Boundaries
 
-- Do not imitate a specific Microsoft presentation or copy proprietary assets.
-- Do not use Microsoft logos unless the presentation has explicit permission
-  and a legitimate reason to do so.
-- Describe the visual system as Fluent-inspired, not Microsoft-official.
-- Do not add decorative filler. Every image, shape, color field, and animation
-  must communicate evidence, structure, emphasis, or navigation.
-- The topic title must be the largest text on the opening slide. On every other
-  slide, the `h2` assertion must be larger than all supporting prose.
-- Every presentation must ship with its rehearsal script and generated karaoke
-  page.
-- Do not bypass the shared runtime or quality checks.
+- Do not recreate Frontend Slides behavior in repository CSS or TypeScript.
+- Do not add another presentation engine without an explicit new decision from
+  the user.
+- Do not add decorative filler. Every visual communicates evidence, structure,
+  emphasis, or navigation.
+- Do not use Microsoft logos without permission or call the result an official
+  Microsoft template.
+
+## Upstream
+
+The vendored Frontend Slides snapshot comes from
+`zarazhangrui/frontend-slides` commit `9906a34` under the MIT license.

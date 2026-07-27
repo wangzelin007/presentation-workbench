@@ -1,9 +1,5 @@
 node_modules/
 dist/
-!comparisons/ai-native-cli/slidev/dist/
-!comparisons/ai-native-cli/slidev/dist/**
-!comparisons/ai-native-cli/revealjs/dist/
-!comparisons/ai-native-cli/revealjs/dist/**
 test-results/
 playwright-report/
 artifacts/visual-review/

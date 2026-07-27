@@ -4,19 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/validate-karaoke.mjs && node scripts/build-catalog.mjs && vite build && node scripts/build-comparisons.mjs",
+    "build": "node scripts/validate-karaoke.mjs && node scripts/build-catalog.mjs && vite build && node scripts/copy-static-artifacts.mjs",
     "check": "npm run typecheck && npm run build && npm test",
     "dev": "node scripts/build-catalog.mjs && vite",
     "karaoke": "node scripts/build-karaoke.mjs",
-    "new": "node scripts/create-deck.mjs",
     "preview": "vite preview",
     "review": "playwright test tests/visual-review.spec.ts --workers=1",
     "test": "playwright test",
     "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@fluentui/tokens": "1.0.0-alpha.23",
-    "@fluentui/web-components": "3.0.2"
   },
   "devDependencies": {
     "@playwright/test": "1.61.1",
