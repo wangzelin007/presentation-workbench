@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            width: 1280px;
+            height: 720px;
+            background-color: #0F172A;
+            color: #F8FAFC;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 40px 60px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            margin-bottom: 40px;
+            border-left: 6px solid #38BDF8;
+            padding-left: 20px;
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #38BDF8;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            font-size: 24px;
+            color: #94A3B8;
+            font-style: italic;
+        }
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .prompt-box {
+            background-color: #1E293B;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border: 1px solid #334155;
+            font-size: 28px;
+            color: #E2E8F0;
+        }
+        .sequence {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        .step {
+            background-color: #0F172A;
+            border: 2px solid #38BDF8;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #F8FAFC;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        }
+        .arrow {
+            font-size: 40px;
+            color: #22D3EE;
+        }
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            color: #475569;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">Live demo</h1>
+        <h2 class="subtitle">A model with no product knowledge can still succeed</h2>
+    </div>
+    <div class="content">
+        <div class="prompt-box">
+            Prompt: <span style="color: #A5B4FC; font-family: monospace;">create a resource group using the prototype CLI.</span>
+        </div>
+        <div class="sequence">
+            <div class="step">cache</div>
+            <div class="arrow">→</div>
+            <div class="step">help</div>
+            <div class="arrow">→</div>
+            <div class="step" style="border-color: #22D3EE;">correct command</div>
+        </div>
+    </div>
+    <div class="page-number">09 / 11</div>
+</body>
+</html>

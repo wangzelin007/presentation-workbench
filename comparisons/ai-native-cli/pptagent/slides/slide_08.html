@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build the tools once. Serve every AI path.</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            width: 1280px;
+            height: 720px;
+            background-color: #0F172A;
+            color: #F8FAFC;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 40px 60px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            margin-bottom: 40px;
+            border-left: 6px solid #38BDF8;
+            padding-left: 20px;
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #38BDF8;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            font-size: 24px;
+            color: #94A3B8;
+            font-style: italic;
+        }
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .flow {
+            display: flex;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+        .box {
+            background-color: #1E293B;
+            padding: 24px 40px;
+            border-radius: 12px;
+            border: 2px solid #334155;
+            font-size: 24px;
+            font-weight: 600;
+            width: 250px;
+            text-align: center;
+        }
+        .box.highlight {
+            border-color: #38BDF8;
+            color: #38BDF8;
+            width: 350px;
+        }
+        .arrow {
+            color: #64748B;
+            font-size: 40px;
+            margin: 0 20px;
+        }
+        .benefit {
+            font-size: 32px;
+            font-weight: 800;
+            color: #22D3EE;
+            text-align: center;
+            padding: 20px 40px;
+            background-color: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            border-radius: 50px;
+        }
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            color: #475569;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">Build the tools once. Serve every AI path.</h1>
+        <h2 class="subtitle">Unified tooling reduces maintenance</h2>
+    </div>
+    <div class="content">
+        <div class="flow">
+            <div class="box">Product Tools</div>
+            <div class="arrow">→</div>
+            <div class="box highlight">Built-in Agent Tools</div>
+            <div class="arrow">←</div>
+            <div class="box">CLI + Skill</div>
+        </div>
+        <div class="benefit">
+            Same logic, same output, lower maintenance.
+        </div>
+    </div>
+    <div class="page-number">08 / 11</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "engine": "Presenton",
+  "repository": "presenton/presenton",
+  "sourceCommit": "57b194b",
+  "runtime": {
+    "container": "ghcr.io/presenton/presenton:latest",
+    "reportedVersion": "0.9.1-beta",
+    "textProvider": "Ollama",
+    "model": "gemma3:1b",
+    "imageGeneration": false,
+    "webSearch": false
+  },
+  "input": {
+    "requestedSlides": 11,
+    "outline": "session artifact presenton-input.txt",
+    "attachments": [
+      "help-levels-1-3.png",
+      "help-levels-4-6.png",
+      "syntax-recovery.png"
+    ]
+  },
+  "outputs": {
+    "pdf": "ai-native-cli-presenton.pdf",
+    "pptx": "ai-native-cli-presenton.pptx",
+    "review": "review/slide-01.png ... review/slide-11.png",
+    "speakerNotesEvidence": "review/speaker-notes.png"
+  },
+  "featuresVerified": {
+    "selfHostedDocker": true,
+    "ollamaModelManagement": true,
+    "promptAndAttachmentInput": true,
+    "templateSelection": "Executive template selected",
+    "outlineEditing": "All 11 slide markdown blocks corrected in the native editor",
+    "speakerNotes": "Generated notes popup opened for slide 1",
+    "pdfExport": true,
+    "pptxExport": true,
+    "editablePptx": "Export succeeded; editability not independently verified in PowerPoint",
+    "dualScreenPresenterView": false
+  },
+  "observedLimitations": [
+    "The 1B local model produced malformed outline JSON on retries and hallucinated unrelated content.",
+    "After manually correcting all 11 outline blocks, the generated slide bodies still leaked unrelated template/example content.",
+    "The three supplied screenshots were accepted as attachments but were not placed in the final slides.",
+    "Speaker notes were generated, but their text did not faithfully follow the supplied rehearsal script.",
+    "The editor exposes a play control and per-slide speaker notes, but a dual-screen presenter window was not verified.",
+    "This output evaluates Presenton's real local workflow with a small offline model; it is not representative of results from its recommended cloud-class models."
+  ]
+}

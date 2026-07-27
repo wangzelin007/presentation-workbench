@@ -1,0 +1,41 @@
+{
+  "slideCount": 11,
+  "consoleErrorsDev": [],
+  "distSlideCount": 11,
+  "consoleErrorsDist": [],
+  "keyboardNav": {
+    "start": 0,
+    "afterRight": {
+      "h": 10,
+      "total": 11
+    },
+    "afterLeft": 0,
+    "afterSpace": 1
+  },
+  "notesPopup": {
+    "opened": true,
+    "title": "reveal.js - Speaker View",
+    "containsSlide1Notes": true,
+    "bodyLen": 357
+  },
+  "overview": {
+    "isOverview": true,
+    "hasClass": true
+  },
+  "fullscreen": {
+    "fKeyDocumentedShortcut": true,
+    "helpOverlayFRow": [
+      "F",
+      "Fullscreen"
+    ],
+    "requestFullscreenInvoked": true,
+    "requestFullscreenTarget": "reveal-full-page",
+    "note": "Reveal.js v6 core binds \"F\" to enter browser fullscreen on the deck root. Headless Chromium cannot actually enter OS fullscreen (no user gesture / no display), but the Fullscreen API IS invoked on keypress, and the built-in help overlay documents the shortcut."
+  },
+  "pdf": {
+    "path": "C:\\Code\\presentation-workbench\\comparisons\\ai-native-cli\\revealjs\\dist\\ai-native-cli.pdf",
+    "sizeBytes": 473436,
+    "pageCount": 11,
+    "errors": []
+  }
+}

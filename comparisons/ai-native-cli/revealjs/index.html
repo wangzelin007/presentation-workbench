@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta
+      name="description"
+      content="AI-Native CLI: Give AI its own manual. A reveal.js edition of the talk."
+    />
+    <title>AI-Native CLI · reveal.js</title>
+
+    <!-- Official reveal.js CSS -->
+    <link rel="stylesheet" href="./node_modules/reveal.js/dist/reset.css" />
+    <link rel="stylesheet" href="./node_modules/reveal.js/dist/reveal.css" />
+    <link rel="stylesheet" href="./node_modules/reveal.js/dist/theme/white.css" id="theme" />
+
+    <!-- Supplemental design layer (typography + slide-specific components) -->
+    <link rel="stylesheet" href="./assets/deck.css" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+        <!-- SLIDE 1 -->
+        <section class="slide-title">
+          <p class="eyebrow">EARLY DESIGN SHARING</p>
+          <h1>AI-Native CLI</h1>
+          <p class="thesis">Give AI its own manual.</p>
+          <p class="detail">Products now serve two users: people and the agents acting for them.</p>
+          <aside class="notes">
+            <p>Hi everyone. I want to share one simple idea today.</p>
+            <p>The products we build now serve two users: the person at the keyboard, and the AI acting on that person's behalf.</p>
+            <p>We already write a manual for the first user. I think we should write one for the second.</p>
+          </aside>
+        </section>
+
+        <!-- SLIDE 2 -->
+        <section class="slide-evidence">
+          <p class="eyebrow">REAL AZURE CLI HELP · LEVELS 1–3</p>
+          <h2>One command starts three lookups away.</h2>
+          <figure class="evidence">
+            <img src="./assets/help-levels-1-3.png"
+                 alt="Azure CLI help output progressing from the top-level command list through network to application-gateway." />
+            <figcaption>Actual <code>az --help</code> output, captured level by level.</figcaption>
+          </figure>
+          <aside class="notes">
+            <p>This is real Azure CLI help. To find one application gateway command, the model must first inspect the top level, then network, then application gateway.</p>
+          </aside>
+        </section>
+
+        <!-- SLIDE 3 -->
+        <section class="slide-evidence">
+          <p class="eyebrow">REAL AZURE CLI HELP · LEVELS 4–6</p>
+          <h2>And it is still three more lookups down.</h2>
+          <figure class="evidence">
+            <img src="./assets/help-levels-4-6.png"
+                 alt="Azure CLI help output progressing through waf-policy, managed-rule, and exclusion to finally reveal the add command." />
+            <figcaption>Six round trips to discover one valid command path.</figcaption>
+          </figure>
+          <aside class="notes">
+            <p>From there it still has to inspect WAF policy, managed rule, and exclusion before the add command finally appears.</p>
+            <p>That is six round trips to discover one path. A small typo can stop the search before it gets there.</p>
+          </aside>
+        </section>
+
+        <!-- SLIDE 4 -->
+        <section>
+          <p class="eyebrow">THE INTERFACE MISMATCH</p>
+          <h2>People optimize for accuracy.<br/>AI optimizes for relevance.</h2>
+          <div class="comparison">
+            <article>
+              <span class="num">01</span>
+              <h3>A person navigates</h3>
+              <p>&ldquo;I know the command. Give me the exact page.&rdquo;</p>
+            </article>
+            <article class="accent">
+              <span class="num">02</span>
+              <h3>An AI retrieves</h3>
+              <p>&ldquo;Give me everything related enough to plan the next step.&rdquo;</p>
+            </article>
+          </div>
+          <aside class="notes">
+            <p>A person usually knows where they want to go. They want the exact page.</p>
+            <p>An AI is planning its next step. It needs the nearby context too, so it can compare options and recover from a wrong guess.</p>
+          </aside>
+        </section>
+
+        <!-- SLIDE 5 -->
+        <section class="slide-evidence">
+          <p class="eyebrow">THE COST OF GUESSING</p>
+          <h2>The model reaches for familiar syntax—and the product must recover.</h2>
+          <figure class="evidence evidence--recovery">
+            <img src="./assets/syntax-recovery.png"
+                 alt="Terminal output showing a VM create command fail because classic Azure CLI parameters were used, followed by the agent identifying the correct contract." />
+            <figcaption>Real recovery: classic CLI flags fail against a different command contract.</figcaption>
+          </figure>
+          <aside class="notes">
+            <p>Here is the failure mode in practice. The model used familiar Azure CLI flags against a different command contract, and the command failed immediately.</p>
+            <p>The agent then had to inspect the real contract, explain every mismatch, and rebuild the plan. Useful recovery, but avoidable work.</p>
+          </aside>
+        </section>
+
+        <!-- SLIDE 6 -->
+        <section>
+          <p class="eyebrow">A SMALLER CONTRACT</p>
+          <h2>Collapse the tree into two machine-friendly moves.</h2>
+          <ol class="steps">
+            <li>
+              <span class="step-num">1</span>
+              <div><strong>List</strong><p>Return a compact catalogue of every capability.</p></div>
+            </li>
+            <li>
+              <span class="step-num">2</span>
+              <div><strong>Inspect</strong><p>Return complete details for fuzzy, related matches.</p></div>
+            </li>
+          </ol>
+          <aside class="notes">
+            <p>The first move is list: give the model a compact catalogue of every capability.</p>
+            <p>The second move is inspect: return complete details for fuzzy, related matches.</p>
+            <p>That gives the model enough context with far fewer round trips.</p>
+          </aside>
+        </section>
+
+        <!-- SLIDE 7 -->
+        <section>
+          <p class="eyebrow">THE AI MANUAL</p>
+          <h2>Expose what the product already knows.</h2>
+          <div class="tool-grid">
+            <article><span class="num">01</span><h3>Environment</h3><p>Identity, version, and runtime state</p></article>
+            <article><span class="num">02</span><h3>Resources</h3><p>What already exists for this user</p></article>
+            <article><span class="num">03</span><h3>Capabilities</h3><p>Supported commands and parameters</p></article>
+            <article><span class="num">04</span><h3>Availability</h3><p>Live constraints the model cannot know</p></article>
+          </div>
+          <aside class="notes">
+            <p>The AI manual does not need to be a new documentation project.</p>
+            <p>Most products already know the environment, existing resources, supported capabilities, and live availability constraints.</p>
+            <p>The opportunity is to expose that knowledge through stable, structured tools.</p>
+          </aside>
+        </section>
+
+        <!-- SLIDE 8 -->
+        <section>
+          <p class="eyebrow">ONE SOURCE OF TRUTH</p>
+          <h2>Build the tools once. Serve every AI path.</h2>
+          <div class="flow">
+            <div class="flow__source">Product tools</div>
+            <div class="flow__line" aria-hidden="true"></div>
+            <div class="flow__targets">
+              <article><span>Direct</span><strong>Built-in agent</strong></article>
+              <article><span>Open</span><strong>CLI + skill</strong></article>
+            </div>
+          </div>
+          <p class="takeaway">Same logic. Same output. Far less maintenance.</p>
+          <aside class="notes">
+            <p>A built-in agent can call the tools directly. An external agent can reach the same tools through a CLI and a skill.</p>
+            <p>Both paths use the same logic and the same output contract. That keeps maintenance low.</p>
+          </aside>
+        </section>
+
+        <!-- SLIDE 9 -->
+        <section class="slide-center demo-slide">
+          <p class="eyebrow">LIVE DEMO</p>
+          <h2>A model with no product knowledge can still succeed.</h2>
+          <div class="terminal">
+            <span class="prompt">PS&gt;</span> create a resource group using the prototype CLI
+            <small>cache → help → correct command</small>
+          </div>
+          <aside class="notes">
+            <p>I have given the coding agent a small skill that points it to these product tools.</p>
+            <p>Watch the sequence. It checks what exists, reads the real command contract, and then builds the command from current facts instead of training data.</p>
+          </aside>
+        </section>
+
+        <!-- SLIDE 10 -->
+        <section>
+          <p class="eyebrow">THE PRODUCT PATTERN</p>
+          <h2>Every product needs two front doors.</h2>
+          <div class="doors">
+            <article><span>For people</span><strong>GUI · docs · human help</strong></article>
+            <div class="doors__plus">+</div>
+            <article class="accent"><span>For AI</span><strong>Structured tools · stable contracts</strong></article>
+          </div>
+          <aside class="notes">
+            <p>Keep the interface for people: the graphical experience, documentation, and human-readable help.</p>
+            <p>Add an interface for AI: structured tools, stable schemas, and errors a model can act on.</p>
+          </aside>
+        </section>
+
+        <!-- SLIDE 11 -->
+        <section class="slide-center">
+          <p class="eyebrow">THE ASK</p>
+          <h2>Ship the AI manual with the product.</h2>
+          <p class="closing-line">Not another agent. A reliable interface for every agent.</p>
+          <aside class="notes">
+            <p>This is not a proposal to build another agent.</p>
+            <p>It is a proposal to give every agent a reliable way to understand and operate the product.</p>
+            <p>My ask is simple: when we ship a product interface for people, ship its AI manual too.</p>
+          </aside>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- Official reveal.js core + notes plugin (UMD builds) -->
+    <script src="./node_modules/reveal.js/dist/reveal.js"></script>
+    <script src="./node_modules/reveal.js/dist/plugin/notes.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        controls: true,
+        progress: true,
+        center: false,
+        width: 1600,
+        height: 900,
+        margin: 0.04,
+        minScale: 0.2,
+        maxScale: 2.0,
+        transition: 'none',
+        display: 'flex',
+        slideNumber: 'c/t',
+        pdfSeparateFragments: false,
+        plugins: [ RevealNotes ]
+      });
+    </script>
+  </body>
+</html>

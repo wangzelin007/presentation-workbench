@@ -1,0 +1,41 @@
+{
+  "engine": "frontend-slides (oss-tools skill) — hand-authored zero-dependency HTML/CSS/JS",
+  "engineVersion": "skill snapshot at C:\\Users\\zelinwang\\.copilot\\session-state\\0ef7738a-a63f-4a05-a6b4-0f3e3fc3e182\\files\\oss-tools\\frontend-slides (no package version; static skill files, git repo present but not pinned to a tag)",
+  "template": "bold-template-pack/blue-professional",
+  "sourceContent": {
+    "html": "presentations\\ai-native-cli\\index.html",
+    "script": "presentations\\ai-native-cli\\script.json",
+    "assets": "presentations\\ai-native-cli\\assets\\*.png (copied verbatim into frontend-slides\\assets)"
+  },
+  "output": {
+    "deck": "comparisons\\ai-native-cli\\frontend-slides\\index.html",
+    "pdf": "comparisons\\ai-native-cli\\frontend-slides\\ai-native-cli-frontend-slides.pdf",
+    "screenshots": "comparisons\\ai-native-cli\\frontend-slides\\review\\slide-01.png ... slide-11.png (1600x900)"
+  },
+  "slideCount": 11,
+  "stage": "Fixed 1920x1080 .deck-stage scaled uniformly via JS transform (viewport-base.css included verbatim), letterboxes/pillarboxes, never reflows",
+  "featuresVerified": {
+    "keyboardNav": "Verified — ArrowRight/ArrowLeft/Space/PageUp/PageDown/Home/End drive SlidePresentation.showSlide(); progress bar, slide counter (bottom-left), and disabled state on first/last nav button all update correctly under real keyboard navigation (checked via Playwright page.keyboard.press in verify.mjs)",
+    "mouseWheelNav": "Implemented (wheel delta>30 triggers next/prev with a 700ms lock) — not exercised by the automated verify script but present in code and manually inspectable",
+    "touchSwipeNav": "Implemented (touchstart/touchend delta>60px horizontal swipe) — logic present; not exercised headlessly since Playwright's default context has no real touch pointer, but the same gesture math is used by the reference html-template.md pattern",
+    "circularNavButtons": ".nav-btn prev/next circular buttons, hover-inverts fill per blue-professional component spec, disabled+dimmed at first/last slide — verified visually in screenshots",
+    "animations": "Staggered .reveal fade+translateY entrance per animation-patterns.md 'Fade + Slide Up', bar-fill grow keyframe on the flow diagram, blinking terminal cursor on the demo slide; prefers-reduced-motion honored via viewport-base.css block",
+    "inlineEditing": "Verified in-browser: edit-hotzone (top-left 80x80) + edit-toggle button using JS hover with 400ms delay (per html-template.md — NOT the broken CSS ~ sibling approach); E key toggles edit mode; all data-editable text nodes become contenteditable",
+    "localStorageAutosave": "Verified: DeckEditor.saveToStorage() persists all editable innerHTML under key 'ai-native-cli--frontend-slides--edits' on blur, on Ctrl+S, and on toggling edit mode off; DeckEditor.restoreFromStorage() re-hydrates on load",
+    "export": "Verified: Export button (revealed alongside the edit toggle) clones the live DOM, strips contenteditable attributes, and downloads a self-contained edited HTML file via Blob/ObjectURL",
+    "pdfExport": "Verified — ran the skill's own scripts/export-pdf.sh through Git Bash (bash.exe at C:\\Program Files\\Git\\bin) against index.html; produced ai-native-cli-frontend-slides.pdf (11 pages, 1920x1080 landscape, 1.1MB)",
+    "consoleErrors": "None — checked via Playwright console/pageerror listeners across all 11 slides",
+    "overflow": "None — scrollHeight/scrollWidth vs clientHeight/clientWidth checked per slide, no overflow detected"
+  },
+  "presenterNotes": {
+    "supported": false,
+    "reason": "The frontend-slides skill (SKILL.md, html-template.md, animation-patterns.md, viewport-base.css) has no concept of a presenter/speaker-notes view, a second display/companion window, or a notes data model. It is a single self-contained HTML file meant to be presented directly. Narration text from script.json 'say' segments was therefore NOT embedded as hidden speaker notes anywhere in this deck — doing so would be fabricating a feature the skill does not define. This is an explicit, intentional limitation of this track, not an oversight."
+  },
+  "knownLimitations": [
+    "No presenter/speaker-notes mode (see presenterNotes above) — by design of the skill.",
+    "PDF export is a static snapshot only; animations, hover states, and inline editing are not preserved in the PDF (documented gotcha in SKILL.md 6B).",
+    "Upstream bug discovered in scripts/export-pdf.sh: when given a RELATIVE output path, the script's own internal `cd \"$TEMP_DIR\"` (done to install Playwright locally) causes the relative OUTPUT_PDF to resolve inside the temp directory, which is then deleted by the script's own cleanup step — the PDF is silently lost even though the script prints a success message and a file size. Workaround used here: pass an ABSOLUTE output path to the script. Not a bug in this deck's HTML/CSS/JS.",
+    "Card grids (e.g. slide 7 'Expose what the product already knows') have generous empty space beneath short body copy at 1920x1080 — a deliberate low-density/speaker-led choice per the user's implicit 11-slide talk-deck pacing, not an overflow defect.",
+    "Touch swipe logic is implemented but could not be exercised by an automated headless browser test (no real touch input in this environment); verified by code review against the skill's touch-nav pattern only."
+  ]
+}

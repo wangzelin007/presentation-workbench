@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expose what the product already knows</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            width: 1280px;
+            height: 720px;
+            background-color: #0F172A;
+            color: #F8FAFC;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 40px 60px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            margin-bottom: 40px;
+            border-left: 6px solid #38BDF8;
+            padding-left: 20px;
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #38BDF8;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            font-size: 24px;
+            color: #94A3B8;
+            font-style: italic;
+        }
+        .content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 30px;
+            padding: 10px;
+        }
+        .tool-card {
+            background-color: #1E293B;
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .tool-name {
+            font-size: 28px;
+            font-weight: 800;
+            color: #22D3EE;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .tool-desc {
+            font-size: 22px;
+            color: #CBD5E1;
+            line-height: 1.4;
+        }
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            color: #475569;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">Expose what the product already knows</h1>
+        <h2 class="subtitle">Four tools for every AI path</h2>
+    </div>
+    <div class="content">
+        <div class="tool-card">
+            <div class="tool-name">Environment</div>
+            <div class="tool-desc">identity, version, runtime state.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-name">Resources</div>
+            <div class="tool-desc">what already exists for this user.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-name">Capabilities</div>
+            <div class="tool-desc">supported commands and parameters.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-name">Availability</div>
+            <div class="tool-desc">live constraints the model cannot know.</div>
+        </div>
+    </div>
+    <div class="page-number">07 / 11</div>
+</body>
+</html>

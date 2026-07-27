@@ -30,6 +30,11 @@ npm run dev
 Open the URL printed by Vite. The catalogue links to every deck in
 `presentations/`.
 
+The [engine comparison](comparisons/ai-native-cli/) renders the same AI-Native
+CLI talk through Frontend Slides, Slidev, reveal.js, Presenton, Banana Slides,
+and PPTAgent so their native workflows and presenter features can be judged
+side by side.
+
 ## Create a presentation
 
 ```bash

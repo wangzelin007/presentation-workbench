@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI-Native CLI — Engine Comparison</title>
+    <style>
+      :root {
+        color: #202124;
+        background: #f4f5f7;
+        font-family: "Segoe UI Variable", "Segoe UI", sans-serif;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      main { width: min(1320px, calc(100% - 48px)); margin: 0 auto; padding: 72px 0 96px; }
+      header { max-width: 860px; margin-bottom: 56px; }
+      .eyebrow { color: #0f6cbd; font-size: 14px; font-weight: 700; letter-spacing: .12em; }
+      h1 { margin: 12px 0 20px; font-size: clamp(46px, 7vw, 88px); line-height: .98; letter-spacing: -.045em; }
+      header p { color: #5c5f62; font-size: 21px; line-height: 1.5; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 24px; }
+      article { display: flex; flex-direction: column; overflow: hidden; border: 1px solid #d8dadd; border-radius: 16px; background: #fff; box-shadow: 0 8px 28px rgb(0 0 0 / 7%); }
+      article img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-bottom: 1px solid #e5e5e5; background: #e8e8e8; }
+      .body { display: flex; flex: 1; flex-direction: column; padding: 26px; }
+      .status { align-self: flex-start; margin-bottom: 16px; padding: 5px 10px; border-radius: 999px; color: #0b5a2b; background: #dff6e7; font-size: 12px; font-weight: 700; }
+      .status.warn { color: #7a4d00; background: #fff0c2; }
+      .status.blocked { color: #8a1c1c; background: #fde4e4; }
+      h2 { margin: 0 0 10px; font-size: 28px; }
+      .body p { margin: 0 0 20px; color: #5c5f62; line-height: 1.45; }
+      .features { margin: 0 0 24px; padding-left: 20px; color: #343638; line-height: 1.6; }
+      .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; }
+      a { padding: 9px 14px; border: 1px solid #b7b9bc; border-radius: 7px; color: #202124; font-weight: 600; text-decoration: none; }
+      a.primary { border-color: #0f6cbd; color: #fff; background: #0f6cbd; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="eyebrow">SAME CONTENT · DIFFERENT NATIVE WORKFLOWS</div>
+        <h1>Choose the engine, not the promise.</h1>
+        <p>Every successful variant uses the same 11-slide AI-Native CLI story,
+          three evidence screenshots, and rehearsal script. Feature claims below
+          are limited to what was actually run and verified.</p>
+      </header>
+      <section class="grid">
+        <article>
+          <img src="./frontend-slides/review/slide-01.png" alt="Frontend Slides title slide" />
+          <div class="body">
+            <span class="status">Complete</span>
+            <h2>Frontend Slides</h2>
+            <p>Blue Professional skill template with a fixed 1920×1080 stage.</p>
+            <ul class="features"><li>Single-file HTML</li><li>Inline editing + localStorage</li><li>PDF export</li><li>No native speaker view</li></ul>
+            <div class="actions"><a class="primary" href="./frontend-slides/index.html">Present</a><a href="./frontend-slides/ai-native-cli-frontend-slides.pdf">PDF</a><a href="./frontend-slides/metadata.json">Details</a></div>
+          </div>
+        </article>
+        <article>
+          <img src="./slidev/review/slide-01.png" alt="Slidev title slide" />
+          <div class="body">
+            <span class="status">Complete</span>
+            <h2>Slidev</h2>
+            <p>Official Markdown/Vue engine with first-class presenter mode.</p>
+            <ul class="features"><li>Speaker notes</li><li>Presenter current/next view</li><li>PDF + rasterized PPTX</li><li>Static site</li></ul>
+            <div class="actions"><a class="primary" href="./slidev/">Present</a><a href="./slidev/presenter/1/">Presenter</a><a href="./slidev/slides-export.pdf">PDF</a><a href="./slidev/slides-export.pptx">PPTX</a><a href="./slidev/metadata.json">Details</a></div>
+          </div>
+        </article>
+        <article>
+          <img src="./revealjs/review/slide-01.png" alt="reveal.js title slide" />
+          <div class="body">
+            <span class="status">Complete</span>
+            <h2>reveal.js</h2>
+            <p>Official reveal.js runtime and Notes plugin.</p>
+            <ul class="features"><li>S-key speaker window</li><li>Overview + fullscreen</li><li>Print-PDF</li><li>Vendored static runtime</li></ul>
+            <div class="actions"><a class="primary" href="./revealjs/index.html">Present</a><a href="./revealjs/ai-native-cli.pdf">PDF</a><a href="./revealjs/metadata.json">Details</a></div>
+          </div>
+        </article>
+        <article>
+          <img src="./presenton/review/slide-01.png" alt="Presenton generated title slide" />
+          <div class="body">
+            <span class="status warn">Model-limited</span>
+            <h2>Presenton</h2>
+            <p>Full self-hosted AI workflow using Ollama gemma3:1b and the Executive template.</p>
+            <ul class="features"><li>Native outline editor</li><li>Per-slide speaker notes</li><li>PDF + PPTX</li><li>1B output was not content-faithful</li></ul>
+            <div class="actions"><a class="primary" href="./presenton/ai-native-cli-presenton.pdf">PDF</a><a href="./presenton/ai-native-cli-presenton.pptx">PPTX</a><a href="./presenton/metadata.json">Details</a></div>
+          </div>
+        </article>
+        <article>
+          <img src="./banana-slides/review/home.png" alt="Banana Slides local interface" />
+          <div class="body">
+            <span class="status blocked">Authorization required</span>
+            <h2>Banana Slides</h2>
+            <p>Official backend and frontend were built and run locally.</p>
+            <ul class="features"><li>Per-page image templates</li><li>Natural-language region editing</li><li>Narration/video workflow</li><li>No output without image-model authorization</li></ul>
+            <div class="actions"><a href="./banana-slides/metadata.json">Run details</a><a href="https://github.com/Anionex/banana-slides/issues/2">Official examples</a></div>
+          </div>
+        </article>
+        <article>
+          <img src="./pptagent/review/slide-01.png" alt="PPTAgent result or run status" />
+          <div class="body">
+            <span class="status blocked">Failed at 9 / 11</span>
+            <h2>PPTAgent / DeepPresenter</h2>
+            <p>Fine-tuned 9B GGUF, agent research, sandbox, HTML design, and PPTX pipeline.</p>
+            <ul class="features"><li>Offline local model</li><li>Real Docker sandbox</li><li>Partial HTML output</li><li>Timed out before PPTX</li></ul>
+            <div class="actions"><a class="primary" href="./pptagent/index.html">View 9 slides</a><a href="./pptagent/metadata.json">Failure details</a></div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

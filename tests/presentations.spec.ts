@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test';
 
+const pagesRoot = '/presentation-workbench';
+
 test('catalogue lists the example presentation', async ({ page }) => {
-  await page.goto('/');
+  await page.goto(`${pagesRoot}/`);
 
   await expect(page).toHaveTitle('Presentation Workbench');
   await expect(
@@ -18,7 +20,7 @@ test('karaoke rehearsal is generated and interactive', async ({ page }) => {
     }
   });
 
-  await page.goto('/presentations/ai-native-cli/karaoke.html');
+  await page.goto(`${pagesRoot}/presentations/ai-native-cli/karaoke.html`);
 
   await expect(page).toHaveTitle('AI-Native CLI rehearsal');
   await expect(page.getByText('Tap to start')).toBeVisible();
@@ -28,13 +30,15 @@ test('karaoke rehearsal is generated and interactive', async ({ page }) => {
 });
 
 test('AI-native CLI remake fits every slide at 16:9', async ({ page }) => {
-  await page.goto('/presentations/ai-native-cli/');
+  await page.goto(`${pagesRoot}/presentations/ai-native-cli/`);
 
   const slides = page.locator('.slide');
   await expect(slides).toHaveCount(11);
 
   for (let index = 0; index < 11; index += 1) {
-    await page.goto(`/presentations/ai-native-cli/#${index + 1}`);
+    await page.goto(
+      `${pagesRoot}/presentations/ai-native-cli/#${index + 1}`,
+    );
     const slide = slides.nth(index);
     await expect(slide).toBeVisible();
     const hasOverflow = await slide.evaluate(
@@ -80,7 +84,7 @@ test('deck supports keyboard and URL navigation without overflow', async ({
     }
   });
 
-  await page.goto('/presentations/welcome/');
+  await page.goto(`${pagesRoot}/presentations/welcome/`);
 
   const slides = page.locator('.slide');
   await expect(slides).toHaveCount(4);

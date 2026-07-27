@@ -14,7 +14,7 @@ const catalogue = JSON.parse(
 
 for (const entry of catalogue) {
   test(`capture every slide: ${entry.title}`, async ({ page }) => {
-    const route = entry.path.replace(/^\./, '');
+    const route = `/presentation-workbench/${entry.path.replace(/^\.\//, '')}`;
     const slug = route.split('/').filter(Boolean).at(-1);
     if (!slug) {
       throw new Error(`Could not derive a slug from "${entry.path}".`);

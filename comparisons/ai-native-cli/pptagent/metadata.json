@@ -1,0 +1,46 @@
+{
+  "engine": "PPTAgent / DeepPresenter",
+  "repository": "icip-cas/PPTAgent",
+  "sourceCommit": "2419d30",
+  "cliVersion": "1.1.37",
+  "runtime": {
+    "platform": "WSL2 Ubuntu 24.04 + Windows Docker Desktop",
+    "model": "Forceless/DeepPresenter-9B-GGUF:q4_K_M",
+    "modelRuntime": "llama.cpp b10106, CPU only, 100000-token context",
+    "sandbox": "forceless/deeppresenter-sandbox",
+    "offlineMode": true
+  },
+  "result": {
+    "status": "failed-partial",
+    "requestedSlides": 11,
+    "generatedHtmlSlides": 9,
+    "pptx": null,
+    "partialGallery": "index.html",
+    "review": "review/slide-01.png ... review/slide-09.png"
+  },
+  "featuresActuallyExercised": [
+    "Research Agent",
+    "Design Agent",
+    "local fine-tuned GGUF model",
+    "real Docker MCP sandbox",
+    "attachment ingestion",
+    "manuscript generation and inspection",
+    "HTML slide generation"
+  ],
+  "compatibilityWorkRequired": [
+    "The official Linux serve.sh assumes NVIDIA/SGLang and failed on a CPU-only host; the documented GGUF llama-server command was started manually.",
+    "The published PyPI 1.1.37 MCP schema requires args, while the current repository example omitted args for one server.",
+    "The PyPI pptagent-mcp ignores CONFIG_FILE and required explicit PPTAGENT_MODEL, PPTAGENT_API_BASE, and PPTAGENT_API_KEY environment entries.",
+    "Windows Docker could not mount a WSL /home path. DEEPPRESENTER_WORKSPACE_BASE and DEEPPRESENTER_HOST_WORKSPACE_BASE were set to paired /mnt/c and C:/ paths.",
+    "WSL Node.js and LibreOffice/poppler had to be installed separately."
+  ],
+  "failure": {
+    "reason": "The CPU design pass generated nine slides over roughly two hours, then a single model request exceeded the framework's 30-minute API timeout.",
+    "qualityObserved": "Slide 1 already contains clipped title and body text. Early inspect_slide calls failed before Node.js was installed, so reflective layout correction did not run on those slides.",
+    "decision": "The process was stopped after the timeout. The nine original HTML files are retained without hand-fixing; no PPTX is claimed."
+  },
+  "speakerNotes": {
+    "supportedByThisRun": false,
+    "detail": "No presenter or speaker-notes artifact was produced before the run failed."
+  }
+}
